@@ -11,6 +11,8 @@ class TestLogin:
         expect(login_page.error_message_close_button).to_be_visible()
         expect(login_page.error_sign_username).to_be_visible()
         expect(login_page.error_sign_password).to_be_visible()
+        expect(login_page.username_field).to_have_css("border-bottom-color", "rgb(226, 35, 26)")
+        expect(login_page.password_field).to_have_css("border-bottom-color", "rgb(226, 35, 26)")
         expect(login_page.error_message).to_have_text("Epic sadface: Username and password do not match any user in this service")
 
     def test_password_required(self, login_page):
@@ -19,6 +21,8 @@ class TestLogin:
         expect(login_page.error_message_close_button).to_be_visible()
         expect(login_page.error_sign_username).to_be_visible()
         expect(login_page.error_sign_password).to_be_visible()
+        expect(login_page.username_field).to_have_css("border-bottom-color", "rgb(226, 35, 26)")
+        expect(login_page.password_field).to_have_css("border-bottom-color", "rgb(226, 35, 26)")
         expect(login_page.error_message).to_have_text("Epic sadface: Password is required")
 
     def test_username_required(self, login_page):
@@ -27,4 +31,6 @@ class TestLogin:
         expect(login_page.error_message_close_button).to_be_visible()
         expect(login_page.error_sign_username).to_be_visible()
         expect(login_page.error_sign_password).to_be_visible()
+        expect(login_page.username_field).to_have_css("border-bottom-color", "rgb(226, 35, 26)")
+        expect(login_page.password_field).to_have_css("border-bottom-color", "rgb(226, 35, 26)")
         expect(login_page.error_message).to_have_text("Epic sadface: Username is required")
