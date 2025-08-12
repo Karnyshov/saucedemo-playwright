@@ -5,3 +5,4 @@ faker==35.2.0
 allure-pytest==2.14.2
 allure-python-commons~=2.14.2
 pytest-check==2.5.3
+faker==35.2.0
