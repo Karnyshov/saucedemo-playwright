@@ -1,9 +1,12 @@
 from playwright.sync_api import Page, expect
 from src.pages.products_page import ProductPage
+from src.pages.base_page import BasePage
+from utils.logger import logger
 import constants
 
-class LoginPage:
+class LoginPage(BasePage):
     def __init__(self, page: Page) -> None:
+        super().__init__(page)
         self.page = page
 
         self.username_field = self.page.locator("//form/div[1]/input")
@@ -32,55 +35,83 @@ class LoginPage:
         self.password = page.locator("//div[@class=\"login_password\"]/h4/text()")
 
     def open_page(self) -> None:
+        logger.info(f"Opening page")
         self.page.goto("https://www.saucedemo.com/")
 
+    # TODO: add check and additional CLEAR action
     def input_username(self, text) -> None:
+        logger.info(f"Typing an username: {text}")
         self.username_field.fill(text)
 
+    #TODO: add check and additional CLEAR action
     def input_password(self, text) -> None:
+        logger.info(f"Typing a password")
         self.password_field.fill(text)
 
     def click_login(self) -> None:
+        logger.info(f"Clicking on login button")
         self.login_button.click()
 
     def login_standard_user(self) -> ProductPage:
+        logger.info(f"Logging as standard user")
         self.input_username(constants.STANDARD_USER)
         self.input_password(constants.PASSWORD)
         self.click_login()
         return ProductPage(self.page)
 
     def login_locked_out_user(self) -> None:
+        logger.info(f"Truing to log in as locked out user")
         self.input_username(constants.LOCKED_OUT_USER)
         self.input_password(constants.PASSWORD)
         self.click_login()
 
     def login_problem_user(self) -> ProductPage:
+        logger.info(f"Logging as user with problems")
         self.input_username(constants.PROBLEM_USER)
         self.input_password(constants.PASSWORD)
         self.click_login()
         return ProductPage(self.page)
 
     def login_performance_glitch_user(self) -> ProductPage:
+        logger.info(f"Logging as user with delay")
         self.input_username(constants.GLITCH_USER)
         self.input_password(constants.PASSWORD)
         self.click_login()
         return ProductPage(self.page)
 
     def login_error_user(self) -> ProductPage:
+        logger.info(f"Logging as user with errors")
         self.input_username(constants.ERROR_USER)
         self.input_password(constants.PASSWORD)
         self.click_login()
         return ProductPage(self.page)
 
     def login_visual_user(self) -> ProductPage:
+        logger.info(f"Logging as user with UI misalignment")
         self.input_username(constants.VISUAL_USER)
         self.input_password(constants.PASSWORD)
         self.click_login()
         return ProductPage(self.page)
 
     def verify_input_error_state(self) -> None:
+        logger.info(f"Checking error state: Error message present, error sign visible, input highlighted")
+        expect(self.error_message_container).not_to_be_empty()
         expect(self.error_message_close_button).to_be_visible()
         expect(self.error_sign_username).to_be_visible()
         expect(self.error_sign_password).to_be_visible()
         expect(self.username_field).to_have_css("border-bottom-color","rgb(226, 35, 26)")
         expect(self.password_field).to_have_css("border-bottom-color","rgb(226, 35, 26)")
+
+    def verify_basic_state(self) -> None:
+        #Checks for input fields and login button omitted since they're already implemented: https://playwright.dev/python/docs/actionability
+        logger.info(f"Checking basic state: input empty, no visible error elements")
+        expect(self.page).to_have_url("https://www.saucedemo.com/")
+        expect(self.page).to_have_title("Swag Labs")
+        expect(self.error_message_container).to_be_empty()
+        expect(self.error_message_close_button).to_be_hidden()
+        expect(self.error_sign_username).to_be_hidden()
+        expect(self.error_sign_password).to_be_hidden()
+        expect(self.username_field).to_be_empty()
+        expect(self.password_field).to_be_empty()
+        expect(self.username_field).not_to_have_css("border-bottom-color","rgb(226, 35, 26)")
+        expect(self.password_field).not_to_have_css("border-bottom-color","rgb(226, 35, 26)")
