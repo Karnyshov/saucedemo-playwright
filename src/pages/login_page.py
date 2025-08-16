@@ -1,4 +1,6 @@
-from playwright.sync_api import Page, Locator, expect
+from playwright.sync_api import Page, expect
+from src.pages.products_page import ProductPage
+import constants
 
 class LoginPage:
     def __init__(self, page: Page) -> None:
@@ -40,3 +42,45 @@ class LoginPage:
 
     def click_login(self) -> None:
         self.login_button.click()
+
+    def login_standard_user(self) -> ProductPage:
+        self.input_username(constants.STANDARD_USER)
+        self.input_password(constants.PASSWORD)
+        self.click_login()
+        return ProductPage(self.page)
+
+    def login_locked_out_user(self) -> None:
+        self.input_username(constants.LOCKED_OUT_USER)
+        self.input_password(constants.PASSWORD)
+        self.click_login()
+
+    def login_problem_user(self) -> ProductPage:
+        self.input_username(constants.PROBLEM_USER)
+        self.input_password(constants.PASSWORD)
+        self.click_login()
+        return ProductPage(self.page)
+
+    def login_performance_glitch_user(self) -> ProductPage:
+        self.input_username(constants.GLITCH_USER)
+        self.input_password(constants.PASSWORD)
+        self.click_login()
+        return ProductPage(self.page)
+
+    def login_error_user(self) -> ProductPage:
+        self.input_username(constants.ERROR_USER)
+        self.input_password(constants.PASSWORD)
+        self.click_login()
+        return ProductPage(self.page)
+
+    def login_visual_user(self) -> ProductPage:
+        self.input_username(constants.VISUAL_USER)
+        self.input_password(constants.PASSWORD)
+        self.click_login()
+        return ProductPage(self.page)
+
+    def verify_input_error_state(self) -> None:
+        expect(self.error_message_close_button).to_be_visible()
+        expect(self.error_sign_username).to_be_visible()
+        expect(self.error_sign_password).to_be_visible()
+        expect(self.username_field).to_have_css("border-bottom-color","rgb(226, 35, 26)")
+        expect(self.password_field).to_have_css("border-bottom-color","rgb(226, 35, 26)")
