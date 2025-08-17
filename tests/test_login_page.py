@@ -1,7 +1,7 @@
 from playwright.sync_api import expect
 from utils.faker import fake
 from tests.conftest import open_login_page
-from src.core.Users import Users
+from src.core.constants import Users
 
 
 class TestLogin:
