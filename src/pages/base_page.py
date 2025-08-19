@@ -17,6 +17,9 @@ class BasePage(abc.ABC):
         self.burger_menu_logout = page.locator("//a[@id=\"logout_sidebar_link\"]")
         self.burger_menu_reset = page.locator("//a[@id=\"reset_sidebar_link\"]")
 
+        self.shopping_cart = page.locator("//a[@class=\"shopping_cart_link\"]")
+        self.shopping_cart_count = page.locator("//span[@class=\"shopping_cart_badge\"]")
+
         self.footer_copyright = page.locator("//footer/div[@class=\"footer_copy\"]")
         self.footer_twitter = page.locator("//footer/ul/li[@class=\"social_twitter\"]")
         self.footer_facebook = page.locator("//footer/ul/li[@class=\"social_facebook\"]")
