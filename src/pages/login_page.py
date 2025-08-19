@@ -10,7 +10,8 @@ class LoginPage(BasePage):
         super().__init__(page)
         self.page = page
 
-        self.username_field = self.page.locator("//form/div[1]/input")
+        self.logo = page.locator("//div[@class='login_logo']")
+        self.username_field = page.locator("//form/div[1]/input")
         # optimized_username_input = "//input[@id='user-name']"
         self.password_field = page.locator("//form/div[2]/input")
         # optimized_password_input = "//input[@id='password']"
@@ -24,20 +25,12 @@ class LoginPage(BasePage):
         self.error_sign_username = page.locator("//form/div[1]/*[2]")
         self.error_sign_password = page.locator("//form/div[2]/*[2]")
 
-        self.usernames_header = page.locator("//div[@id=\"login_credentials\"]/h4")
-        self.standard_user_title = page.locator("//div[@id=\"login_credentials\"]/text()[1]")
-        self.locked_out_user_title = page.locator("//div[@id=\"login_credentials\"]/text()[2]")
-        self.problem_user_title = page.locator("//div[@id=\"login_credentials\"]/text()[3]")
-        self.performance_glitch_user_title = page.locator("//div[@id=\"login_credentials\"]/text()[4]")
-        self.error_user_title = page.locator("//div[@id=\"login_credentials\"]/text()[5]")
-        self.visual_user_title = page.locator("//div[@id=\"login_credentials\"]/text()[6]")
-
         self.password_header = page.locator("//div[@class=\"login_password\"]/h4")
         self.password = page.locator("//div[@class=\"login_password\"]/h4/text()")
 
     def open_login_page(self) -> None:
         logger.info(f"Opening page")
-        self.page.goto("https://www.saucedemo.com/")
+        self.page.goto(self.base_url)
 
     # TODO: add check and additional CLEAR action
     def input_username(self, text) -> None:
