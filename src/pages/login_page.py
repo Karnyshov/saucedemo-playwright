@@ -1,5 +1,5 @@
 from playwright.sync_api import Page, expect
-from src.pages.products_page import ProductPage
+from src.pages.products_page import ProductsPage
 from src.pages.base_page import BasePage
 from utils.logger import logger
 from src.core.constants import Users
@@ -46,12 +46,12 @@ class LoginPage(BasePage):
         logger.info(f"Clicking on login button")
         self.login_button.click()
 
-    def login_standard_user(self) -> ProductPage:
+    def login_standard_user(self) -> ProductsPage:
         logger.info(f"Logging as standard user")
         self.input_username(Users.STANDARD_USER)
         self.input_password(Users.PASSWORD)
         self.click_login()
-        return ProductPage(self.page)
+        return ProductsPage(self.page)
 
     def login_locked_out_user(self) -> None:
         logger.info(f"Truing to log in as locked out user")
@@ -59,33 +59,33 @@ class LoginPage(BasePage):
         self.input_password(Users.PASSWORD)
         self.click_login()
 
-    def login_problem_user(self) -> ProductPage:
+    def login_problem_user(self) -> ProductsPage:
         logger.info(f"Logging as user with problems")
         self.input_username(Users.PROBLEM_USER)
         self.input_password(Users.PASSWORD)
         self.click_login()
-        return ProductPage(self.page)
+        return ProductsPage(self.page)
 
-    def login_performance_glitch_user(self) -> ProductPage:
+    def login_performance_glitch_user(self) -> ProductsPage:
         logger.info(f"Logging as user with delay")
         self.input_username(Users.GLITCH_USER)
         self.input_password(Users.PASSWORD)
         self.click_login()
-        return ProductPage(self.page)
+        return ProductsPage(self.page)
 
-    def login_error_user(self) -> ProductPage:
+    def login_error_user(self) -> ProductsPage:
         logger.info(f"Logging as user with errors")
         self.input_username(Users.ERROR_USER)
         self.input_password(Users.PASSWORD)
         self.click_login()
-        return ProductPage(self.page)
+        return ProductsPage(self.page)
 
-    def login_visual_user(self) -> ProductPage:
+    def login_visual_user(self) -> ProductsPage:
         logger.info(f"Logging as user with UI misalignment")
         self.input_username(Users.VISUAL_USER)
         self.input_password(Users.PASSWORD)
         self.click_login()
-        return ProductPage(self.page)
+        return ProductsPage(self.page)
 
     def verify_input_error_state(self) -> None:
         logger.info(f"Checking error state: Error message present, error sign visible, input highlighted")
