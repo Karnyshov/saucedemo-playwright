@@ -1,4 +1,4 @@
-from playwright.sync_api import Page, expect
+from playwright.sync_api import Page,expect,BrowserContext
 import abc
 
 
@@ -22,9 +22,9 @@ class BasePage(abc.ABC):
         self.shopping_cart_count = page.locator("//span[@class=\"shopping_cart_badge\"]")
 
         self.footer_copyright = page.locator("//footer/div[@class=\"footer_copy\"]")
-        self.footer_twitter = page.locator("//footer/ul/li[@class=\"social_twitter\"]")
-        self.footer_facebook = page.locator("//footer/ul/li[@class=\"social_facebook\"]")
-        self.footer_linkedin = page.locator("//footer/ul/li[@class=\"social_linkedin\"]")
+        self.footer_twitter = page.locator("//footer/ul/li[@class=\"social_twitter\"]/a")
+        self.footer_facebook = page.locator("//footer/ul/li[@class=\"social_facebook\"]/a")
+        self.footer_linkedin = page.locator("//footer/ul/li[@class=\"social_linkedin\"]/a")
 
     def verify_burger_menu_opened(self) -> None:
         expect(self.burger_menu).not_to_be_hidden()
@@ -49,3 +49,13 @@ class BasePage(abc.ABC):
     def close_burger_menu(self) -> None:
         self.burger_close_button.click()
         self.verify_burger_menu_closed()
+
+    def click_footer_facebook_button(self):
+        pass
+
+    def click_footer_twitter_button(self, context: BrowserContext):
+        self.footer_twitter.click()
+        self.page.wait_for_timeout(500)
+        new_page = context.pages[-1]
+        new_page.wait_for_load_state()
+        return new_page
