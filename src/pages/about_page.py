@@ -1,6 +1,5 @@
-from playwright.sync_api import Page, expect
-from src.pages.base_page import BasePage
-from utils.logger import logger
+from playwright.sync_api import Page
+
 
 class AboutPage:
     def __init__(self, page: Page) -> None:
