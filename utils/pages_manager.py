@@ -14,5 +14,15 @@ class PagesManager:
         self.products_page = ProductsPage(page)
         self.about_page = AboutPage(page)
         self.facebook_page = FacebookPage(page)
-        self.twitter_page = TwitterPage(page)
+        #self.twitter_page = TwitterPage(page)
+        self.twitter_page = None
         self.linkedin_page = LinkedInPage(page)
+
+    @property
+    def twitter(self):
+        return self.twitter_page
+
+    @twitter.setter
+    def twitter(self, page: Page):
+        if self.twitter_page is None:
+            self.twitter_page = TwitterPage(page)

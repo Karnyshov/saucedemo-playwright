@@ -1,6 +1,5 @@
-from playwright.sync_api import expect, Playwright
+from playwright.sync_api import expect
 from tests.conftest import page_manager as pm
-from src.pages.twitter_page import TwitterPage
 
 class TestProducts:
     #TODO: add more checks
@@ -24,22 +23,16 @@ class TestProducts:
     def test_footer_twitter(self, pm):
         pm.login_page.open_login_page()
         pm.login_page.login_standard_user()
-        #returns page that can be used to create Page Object. But Page Object is already initialized
-        with pm.products_page.page.context.expect_page() as new_page_info:
-            pm.products_page.footer_twitter.click()
-
-        twitter_page = TwitterPage(new_page_info.value)
-        twitter_page.page.wait_for_load_state()
-        expect(twitter_page.page).to_have_url("https://x.com/saucelabs")
-        expect(twitter_page.page).to_have_title("Sauce Labs (@saucelabs) / X")
+        pm.twitter = pm.products_page.click_footer_twitter_button()
+        expect(pm.twitter_page.page).to_have_url("https://x.com/saucelabs")
+        expect(pm.twitter_page.page).to_have_title("Sauce Labs (@saucelabs) / X")
 
     def test_footer_twitter1(self, pm):
         pm.login_page.open_login_page()
         pm.login_page.login_standard_user()
-
-        #returns page, but not Page Object, and it needs to already initialized Page Object
-        twitter = pm.products_page.click_footer_twitter_button(pm.twitter_page.page.context)
-        expect(twitter).to_have_url("https://x.com/saucelabs")
+        pm.twitter = pm.products_page.click_footer_button(pm.products_page.footer_twitter)
+        expect(pm.twitter_page.page).to_have_url("https://x.com/saucelabs")
+        expect(pm.twitter_page.page).to_have_title("Sauce Labs (@saucelabs) / X")
 
     def test_burger_menu(self, pm):
         pm.login_page.open_login_page()

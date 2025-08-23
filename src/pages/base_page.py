@@ -1,4 +1,4 @@
-from playwright.sync_api import Page,expect,BrowserContext
+from playwright.sync_api import Page,expect
 import abc
 
 
@@ -50,12 +50,14 @@ class BasePage(abc.ABC):
         self.burger_close_button.click()
         self.verify_burger_menu_closed()
 
-    def click_footer_facebook_button(self):
-        pass
+    def click_footer_twitter_button(self):
+        with self.page.context.expect_page() as new_page_info:
+            self.footer_twitter.click()
 
-    def click_footer_twitter_button(self, context: BrowserContext):
-        self.footer_twitter.click()
-        self.page.wait_for_timeout(500)
-        new_page = context.pages[-1]
-        new_page.wait_for_load_state()
-        return new_page
+        return new_page_info.value
+
+    def click_footer_button(self, locator):
+        with self.page.context.expect_page() as new_page_info:
+            locator.click()
+
+        return new_page_info.value
