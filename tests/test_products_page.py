@@ -7,32 +7,34 @@ class TestProducts:
         pm.login_page.open_login_page()
         pm.login_page.login_standard_user()
         pm.products_page.verify_burger_menu_closed()
-
-    def test_footer(self, pm):
-        pm.login_page.open_login_page()
-        pm.login_page.login_standard_user()
-        expect(pm.products_page.footer_copyright).not_to_be_empty()
-        expect(pm.products_page.footer_copyright).to_have_text("© 2025 Sauce Labs. All Rights Reserved. Terms of Service | Privacy Policy")
-        expect(pm.products_page.footer_twitter).to_have_attribute("href", "https://twitter.com/saucelabs")
-        expect(pm.products_page.footer_twitter).to_have_text("Twitter")
-        expect(pm.products_page.footer_facebook).to_have_attribute("href","https://www.facebook.com/saucelabs")
-        expect(pm.products_page.footer_facebook).to_have_text("Facebook")
-        expect(pm.products_page.footer_linkedin).to_have_attribute("href","https://www.linkedin.com/company/sauce-labs/")
-        expect(pm.products_page.footer_linkedin).to_have_text("LinkedIn")
+        pm.products_page.verify_copyright()
+        pm.products_page.verify_footer_twitter()
+        pm.products_page.verify_footer_facebook()
+        pm.products_page.verify_footer_linkedin()
 
     def test_footer_twitter(self, pm):
         pm.login_page.open_login_page()
         pm.login_page.login_standard_user()
-        pm.twitter = pm.products_page.click_footer_twitter_button()
-        expect(pm.twitter_page.page).to_have_url("https://x.com/saucelabs")
-        expect(pm.twitter_page.page).to_have_title("Sauce Labs (@saucelabs) / X")
-
-    def test_footer_twitter1(self, pm):
-        pm.login_page.open_login_page()
-        pm.login_page.login_standard_user()
+        pm.products_page.verify_footer_twitter()
         pm.twitter = pm.products_page.click_footer_button(pm.products_page.footer_twitter)
         expect(pm.twitter_page.page).to_have_url("https://x.com/saucelabs")
         expect(pm.twitter_page.page).to_have_title("Sauce Labs (@saucelabs) / X")
+
+    def test_footer_facebook(self, pm):
+        pm.login_page.open_login_page()
+        pm.login_page.login_standard_user()
+        pm.products_page.verify_footer_facebook()
+        pm.facebook = pm.products_page.click_footer_button(pm.products_page.footer_facebook)
+        expect(pm.facebook_page.page).to_have_url("https://www.facebook.com/saucelabs")
+        expect(pm.facebook_page.page).to_have_title("Sauce Labs | Facebook")
+
+    def test_footer_linkedin(self, pm):
+        pm.login_page.open_login_page()
+        pm.login_page.login_standard_user()
+        pm.products_page.verify_footer_linkedin()
+        pm.linkedin = pm.products_page.click_footer_button(pm.products_page.footer_linkedin)
+        expect(pm.linkedin_page.page).to_have_url("https://www.linkedin.com/company/sauce-labs/")
+        expect(pm.linkedin_page.page).to_have_title("Sauce Labs | LinkedIn")
 
     def test_burger_menu(self, pm):
         pm.login_page.open_login_page()

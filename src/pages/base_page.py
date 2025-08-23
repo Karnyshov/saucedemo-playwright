@@ -50,14 +50,24 @@ class BasePage(abc.ABC):
         self.burger_close_button.click()
         self.verify_burger_menu_closed()
 
-    def click_footer_twitter_button(self):
-        with self.page.context.expect_page() as new_page_info:
-            self.footer_twitter.click()
-
-        return new_page_info.value
-
     def click_footer_button(self, locator):
         with self.page.context.expect_page() as new_page_info:
             locator.click()
 
         return new_page_info.value
+
+    def verify_copyright(self) -> None:
+        expect(self.footer_copyright).not_to_be_empty()
+        expect(self.footer_copyright).to_have_text("© 2025 Sauce Labs. All Rights Reserved. Terms of Service | Privacy Policy")
+
+    def verify_footer_twitter(self) -> None:
+        expect(self.footer_twitter).to_have_attribute("href", "https://twitter.com/saucelabs")
+        expect(self.footer_twitter).to_have_text("Twitter")
+
+    def verify_footer_facebook(self) -> None:
+        expect(self.footer_facebook).to_have_attribute("href","https://www.facebook.com/saucelabs")
+        expect(self.footer_facebook).to_have_text("Facebook")
+
+    def verify_footer_linkedin(self) -> None:
+        expect(self.footer_linkedin).to_have_attribute("href","https://www.linkedin.com/company/sauce-labs/")
+        expect(self.footer_linkedin).to_have_text("LinkedIn")
