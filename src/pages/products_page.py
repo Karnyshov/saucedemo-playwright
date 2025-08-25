@@ -16,7 +16,9 @@ class ProductsPage(BasePage):
         self.page.goto(self.page_url)
 
     def open_about_page(self) -> None:
+        logger.info(f"Opening About page from burger menu")
         self.burger_menu_about.click()
 
     def logout(self) -> None:
+        logger.info(f"Logging out as current user")
         self.burger_menu_logout.click()
