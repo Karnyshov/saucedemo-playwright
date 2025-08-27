@@ -7,6 +7,7 @@ from src.pages.login_page import LoginPage
 from src.pages.products_page import ProductsPage
 from src.pages.twitter_page import TwitterPage
 
+#Draft of improvement: https://chatgpt.com/s/t_68ae17983d148191b545e531cba62a21
 #TODO: make lazy loading for all pages
 class SauceDemoUI:
     def __init__(self, page: Page):
