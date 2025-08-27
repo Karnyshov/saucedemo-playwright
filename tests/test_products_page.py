@@ -70,3 +70,15 @@ class TestProducts:
         pm.products_page.logout()
         expect(pm.login_page.page).to_have_url("https://www.saucedemo.com/")
         expect(pm.login_page.page).to_have_title("Swag Labs")
+
+    def test_add_to_cart(self, pm):
+        pass
+
+    def test_remove_from_cart(self, pm):
+        pass
+
+    def test_add_items_to_cart(self, pm):
+        pass
+
+    def test_remove_items_from_cart(self, pm):
+        pass

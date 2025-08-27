@@ -22,3 +22,15 @@ class ProductsPage(BasePage):
     def logout(self) -> None:
         logger.info(f"Logging out as current user")
         self.burger_menu_logout.click()
+
+    def get_all_items(self):
+        pass
+
+    def get_random_item(self):
+        pass
+
+    def add_to_cart(self):
+        pass
+
+    def remove_from_cart(self):
+        pass
