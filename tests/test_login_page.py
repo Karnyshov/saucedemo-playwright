@@ -1,6 +1,6 @@
 from playwright.sync_api import expect
 from utils.faker import fake
-from src.core.constants import Users
+from src.constants.users import Users
 from tests.conftest import page_manager as pm
 
 

@@ -8,7 +8,7 @@ from src.pages.products_page import ProductsPage
 from src.pages.twitter_page import TwitterPage
 
 #TODO: make lazy loading for all pages
-class PagesManager:
+class SauceDemoUI:
     def __init__(self, page: Page):
         self.login_page = LoginPage(page)
         self.products_page = ProductsPage(page)

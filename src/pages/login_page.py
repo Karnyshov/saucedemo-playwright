@@ -1,7 +1,7 @@
 from playwright.sync_api import Page, expect
 from src.pages.base_page import BasePage
 from utils.logger import logger
-from src.core.constants import Users
+from src.constants.users import Users
 
 
 class LoginPage(BasePage):
