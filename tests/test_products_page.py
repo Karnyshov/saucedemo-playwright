@@ -71,14 +71,9 @@ class TestProducts:
         expect(pm.login_page.page).to_have_url("https://www.saucedemo.com/")
         expect(pm.login_page.page).to_have_title("Swag Labs")
 
-    def test_add_to_cart(self, pm):
-        pass
-
-    def test_remove_from_cart(self, pm):
-        pass
-
-    def test_add_items_to_cart(self, pm):
-        pass
-
-    def test_remove_items_from_cart(self, pm):
-        pass
+    def test_get_all_items(self, pm):
+        pm.login_page.open_login_page()
+        pm.login_page.login_standard_user()
+        pm.products_page.get_all_items()
+        #pm.products_page.verify_product_item()
+        pm.products_page.verify_product_item1(pm.products_page.product_items[0])
