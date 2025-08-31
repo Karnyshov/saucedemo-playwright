@@ -74,6 +74,11 @@ class TestProducts:
     def test_get_all_items(self, pm):
         pm.login_page.open_login_page()
         pm.login_page.login_standard_user()
-        pm.products_page.get_all_items()
-        #pm.products_page.verify_product_item()
-        pm.products_page.verify_product_item1(pm.products_page.product_items[0])
+        items = pm.products_page.get_all_items()
+        pm.products_page.verify_product_items(items)
+
+    def test_random_item(self, pm):
+        pm.login_page.open_login_page()
+        pm.login_page.login_standard_user()
+        item = pm.products_page.get_random_item()
+        pm.products_page.verify_product_item(item)
