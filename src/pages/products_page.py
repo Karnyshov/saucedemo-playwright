@@ -29,21 +29,29 @@ class ProductsPage(BasePage):
         self.burger_menu_logout.click()
 
     def get_all_items(self):
+        logger.info(f"Getting all Product Items on page")
         items = []
         for i in range(self.product_item_element.count()):
             items.append(ProductItem(self.page, self.product_item_element.nth(i)))
         return items
 
-    def get_random_item(self):
+    def get_random_item(self) -> ProductItem:
+        logger.info(f"Getting random Product Item on page")
         items = self.get_all_items()
         return random.choice(items)
 
-    # Leave as static or change?
+    def get_item(self, position):
+        logger.info(f"Getting Product Item by given position")
+        items = self.get_all_items()
+        return items[position]
+
+    # Leave as static or change? Move to product item POM?
     @staticmethod
-    def verify_product_item(product_item) -> None:
-        expect(product_item.image).to_have_attribute("src",re.compile(r"^.+\.(jpg|jpeg)$"))
-        expect(product_item.image_link).to_have_attribute("href","#")
-        expect(product_item.item_name_link).to_have_attribute("href","#")
+    def verify_product_item(product_item: ProductItem) -> None:
+        logger.info(f"Verifying given Product Item")
+        expect(product_item.image).to_have_attribute("src", re.compile(r"^.+\.(jpg|jpeg)$"))
+        expect(product_item.image_link).to_have_attribute("href", "#")
+        expect(product_item.item_name_link).to_have_attribute("href", "#")
         expect(product_item.item_name).not_to_be_empty()
         expect(product_item.description).not_to_be_empty()
         expect(product_item.price).not_to_be_empty()
@@ -51,12 +59,20 @@ class ProductsPage(BasePage):
         expect(product_item.add_button).to_be_visible()
 
     def verify_product_items(self, product_items) -> None:
+        logger.info(f"Verifying all Product Items on page")
         for item in product_items:
             self.verify_product_item(item)
 
-    def add_to_cart(self, product_item):
-        pass
+    # Leave as static or change? Move to product item POM?
+    @staticmethod
+    def add_to_cart(product_item: ProductItem):
+        logger.info(f"Adding given Product Item to cart")
+        expect(product_item.remove_button).not_to_be_visible()
+        product_item.add_button.click()
 
-    def remove_from_cart(self, product_item):
-        pass
-
+    # Leave as static or change? Move to product item POM?
+    @staticmethod
+    def remove_from_cart(product_item: ProductItem):
+        logger.info(f"Removing given Product Item from cart")
+        expect(product_item.add_button).not_to_be_visible()
+        product_item.remove_button.click()

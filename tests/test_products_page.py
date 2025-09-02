@@ -11,6 +11,11 @@ class TestProducts:
         pm.products_page.verify_footer_twitter()
         pm.products_page.verify_footer_facebook()
         pm.products_page.verify_footer_linkedin()
+        expect(pm.products_page.shopping_cart).to_be_visible()
+        expect(pm.products_page.shopping_cart_count).not_to_be_visible()
+        expect(pm.products_page.products_page_title).to_have_text("Products")
+        expect(pm.products_page.product_item_element).not_to_have_count(0)
+
 
     def test_footer_twitter(self, pm):
         pm.login_page.open_login_page()
@@ -82,3 +87,51 @@ class TestProducts:
         pm.login_page.login_standard_user()
         item = pm.products_page.get_random_item()
         pm.products_page.verify_product_item(item)
+
+    # How to optimize?
+    def test_add_to_cart_single_item(self, pm):
+        pm.login_page.open_login_page()
+        pm.login_page.login_standard_user()
+        item = pm.products_page.get_random_item()
+        expect(pm.products_page.shopping_cart_count).not_to_be_visible()
+        pm.products_page.add_to_cart(item)
+        expect(pm.products_page.shopping_cart_count).to_have_text("1")
+        expect(item.remove_button).to_be_visible()
+        expect(item.add_button).not_to_be_visible()
+
+    #How to optimize?
+    def test_remove_from_cart_single_item(self, pm):
+        pm.login_page.open_login_page()
+        pm.login_page.login_standard_user()
+        item = pm.products_page.get_random_item()
+        expect(pm.products_page.shopping_cart_count).not_to_be_visible()
+        pm.products_page.add_to_cart(item)
+        expect(pm.products_page.shopping_cart_count).to_have_text("1")
+        expect(item.remove_button).to_be_visible()
+        expect(item.add_button).not_to_be_visible()
+        pm.products_page.remove_from_cart(item)
+        expect(pm.products_page.shopping_cart_count).not_to_be_visible()
+        expect(item.add_button).to_be_visible()
+        expect(item.remove_button).not_to_be_visible()
+
+    # How to optimize?
+    def test_add_to_cart_multi_items(self, pm):
+        pm.login_page.open_login_page()
+        pm.login_page.login_standard_user()
+        item1 = pm.products_page.get_item(0)
+        item2 = pm.products_page.get_item(1)
+        pm.products_page.add_to_cart(item1)
+        pm.products_page.add_to_cart(item2)
+        expect(pm.products_page.shopping_cart_count).to_have_text("2")
+
+    # How to optimize?
+    def test_remove_from_cart_multi_items(self, pm):
+        pm.login_page.open_login_page()
+        pm.login_page.login_standard_user()
+        item1 = pm.products_page.get_item(0)
+        item2 = pm.products_page.get_item(1)
+        pm.products_page.add_to_cart(item1)
+        pm.products_page.add_to_cart(item2)
+        expect(pm.products_page.shopping_cart_count).to_have_text("2")
+        pm.products_page.remove_from_cart(item1)
+        pm.products_page.remove_from_cart(item2)
