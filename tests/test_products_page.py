@@ -11,6 +11,11 @@ class TestProducts:
         pm.products_page.verify_footer_twitter()
         pm.products_page.verify_footer_facebook()
         pm.products_page.verify_footer_linkedin()
+        expect(pm.products_page.shopping_cart).to_be_visible()
+        expect(pm.products_page.shopping_cart_count).not_to_be_visible()
+        expect(pm.products_page.products_page_title).to_have_text("Products")
+        expect(pm.products_page.product_item_element).not_to_have_count(0)
+
 
     def test_footer_twitter(self, pm):
         pm.login_page.open_login_page()
@@ -70,3 +75,67 @@ class TestProducts:
         pm.products_page.logout()
         expect(pm.login_page.page).to_have_url("https://www.saucedemo.com/")
         expect(pm.login_page.page).to_have_title("Swag Labs")
+
+    def test_get_all_items(self, pm):
+        pm.login_page.open_login_page()
+        pm.login_page.login_standard_user()
+        items = pm.products_page.get_all_items()
+        pm.products_page.verify_product_items(items)
+
+    def test_random_item(self, pm):
+        pm.login_page.open_login_page()
+        pm.login_page.login_standard_user()
+        item = pm.products_page.get_random_item()
+        item.verify_product_item()
+
+    # TODO: move logging to function level fixture
+    def test_add_to_cart_single_item(self, pm):
+        pm.login_page.open_login_page()
+        pm.login_page.login_standard_user()
+        item = pm.products_page.get_random_item()
+        expect(pm.products_page.shopping_cart_count).not_to_be_visible()
+        item.add_to_cart()
+        item.verify_item_added_to_cart()
+
+    # TODO: move logging to function level fixture
+    def test_remove_from_cart_single_item(self, pm):
+        pm.login_page.open_login_page()
+        pm.login_page.login_standard_user()
+        item = pm.products_page.get_random_item()
+        expect(pm.products_page.shopping_cart_count).not_to_be_visible()
+        item.add_to_cart()
+        item.verify_item_added_to_cart()
+        item.remove_from_cart()
+        item.verify_item_removed_from_cart()
+
+    # TODO: move logging to function level fixture
+    def test_add_to_cart_multi_items(self, pm):
+        pm.login_page.open_login_page()
+        pm.login_page.login_standard_user()
+        item1 = pm.products_page.get_item(0)
+        item2 = pm.products_page.get_item(1)
+        item1.add_to_cart()
+        item1.verify_item_added_to_cart()
+        expect(pm.products_page.shopping_cart_count).to_have_text("1")
+        item2.add_to_cart()
+        item2.verify_item_added_to_cart()
+        expect(pm.products_page.shopping_cart_count).to_have_text("2")
+
+    # TODO: move logging to function level fixture
+    def test_remove_from_cart_multi_items(self, pm):
+        pm.login_page.open_login_page()
+        pm.login_page.login_standard_user()
+        item1 = pm.products_page.get_item(0)
+        item2 = pm.products_page.get_item(1)
+        item1.add_to_cart()
+        item1.verify_item_added_to_cart()
+        expect(pm.products_page.shopping_cart_count).to_have_text("1")
+        item2.add_to_cart()
+        item2.verify_item_added_to_cart()
+        expect(pm.products_page.shopping_cart_count).to_have_text("2")
+        item1.remove_from_cart()
+        item1.verify_item_removed_from_cart()
+        expect(pm.products_page.shopping_cart_count).to_have_text("1")
+        item2.remove_from_cart()
+        item2.verify_item_removed_from_cart()
+        expect(pm.products_page.shopping_cart_count).not_to_be_visible()
