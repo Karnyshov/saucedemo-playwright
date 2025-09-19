@@ -11,11 +11,9 @@ class TestProducts:
         pm.products_page.verify_footer_twitter()
         pm.products_page.verify_footer_facebook()
         pm.products_page.verify_footer_linkedin()
-        expect(pm.products_page.shopping_cart).to_be_visible()
-        expect(pm.products_page.shopping_cart_count).not_to_be_visible()
+        pm.products_page.verify_empty_cart()
         expect(pm.products_page.products_page_title).to_have_text("Products")
         expect(pm.products_page.product_item_element).not_to_have_count(0)
-
 
     def test_footer_twitter(self, pm):
         pm.login_page.open_login_page()
@@ -139,3 +137,20 @@ class TestProducts:
         item2.remove_from_cart()
         item2.verify_item_removed_from_cart()
         expect(pm.products_page.shopping_cart_count).not_to_be_visible()
+
+    def test_sorting(self, pm):
+        pm.login_page.open_login_page()
+        pm.login_page.login_standard_user()
+        pm.products_page.sorting_dropdown.click()
+        pm.products_page.sorting_dropdown.select_option(value = "az")
+        expect(pm.products_page.active_sorting).to_have_text("Name (A to Z)")
+        
+
+    def test_reversed_sorting(self, pm):
+        pass
+
+    def test_low_high_price_sorting(self, pm):
+        pass
+
+    def test_high_low_price_sorting(self, pm):
+        pass

@@ -12,8 +12,12 @@ class ProductsPage(BasePage):
         self.page = page
         self.page_url = urljoin(self.base_url, "inventory.html")
         self.products_page_title = page.locator("//span[@class=\"title\"]")
+
         self.product_items_list = page.locator("//div[@class=\"inventory_list\"]")
         self.product_item_element = page.locator("//div[@class=\"inventory_item\"]")
+
+        self.active_sorting = page.locator("//span[@class='active_option']")
+        self.sorting_dropdown = page.locator("//select[@class='product_sort_container']")
 
     def open_products_page(self) -> None:
         logger.info(f"Opening Products page")
@@ -49,3 +53,6 @@ class ProductsPage(BasePage):
         logger.info(f"Verifying all Product Items on page")
         for item in product_items:
             item.verify_product_item()
+
+    def verify_basic_state_sorting(self):
+        expect(self.active_sorting).to_have_text("Name (A to Z)")
