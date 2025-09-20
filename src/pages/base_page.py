@@ -81,3 +81,7 @@ class BasePage(abc.ABC):
         logger.info(f"Checking LinkedIn button is present")
         expect(self.footer_linkedin).to_have_attribute("href","https://www.linkedin.com/company/sauce-labs/")
         expect(self.footer_linkedin).to_have_text("LinkedIn")
+
+    def verify_empty_cart(self):
+        expect(self.shopping_cart).to_be_visible()
+        expect(self.shopping_cart_count).not_to_be_visible()

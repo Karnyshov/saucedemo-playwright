@@ -12,8 +12,12 @@ class ProductsPage(BasePage):
         self.page = page
         self.page_url = urljoin(self.base_url, "inventory.html")
         self.products_page_title = page.locator("//span[@class=\"title\"]")
+
         self.product_items_list = page.locator("//div[@class=\"inventory_list\"]")
         self.product_item_element = page.locator("//div[@class=\"inventory_item\"]")
+
+        self.active_sorting = page.locator("//span[@class='active_option']")
+        self.sorting_dropdown = page.locator("//select[@class='product_sort_container']")
 
     def open_products_page(self) -> None:
         logger.info(f"Opening Products page")
@@ -34,6 +38,16 @@ class ProductsPage(BasePage):
             items.append(ProductItem(self.page, self.product_item_element.nth(i)))
         return items
 
+    @staticmethod
+    def get_item_names(items) -> list:
+        logger.info(f"Getting list of names from Product Items")
+        return [item.item_name.inner_text() for item in items]
+
+    @staticmethod
+    def get_item_prices(items) -> list:
+        logger.info(f"Getting list of prices from Product Items")
+        return [float(item.price.inner_text().replace("$","")) for item in items]
+
     def get_random_item(self) -> ProductItem:
         logger.info(f"Getting random Product Item on page")
         items = self.get_all_items()
@@ -49,3 +63,37 @@ class ProductsPage(BasePage):
         logger.info(f"Verifying all Product Items on page")
         for item in product_items:
             item.verify_product_item()
+
+    def select_sorting(self, sorting_option) -> None:
+        logger.info(f"Applying provided sorting to Product Items on the page: {sorting_option}")
+        if sorting_option not in ["az", "za", "lohi", "hilo"]:
+            raise ValueError(f"Invalid sorting option: {sorting_option}")
+        if sorting_option == "az" and self.active_sorting.inner_text() != "Name (A to Z)":
+            self.sorting_dropdown.select_option(value = "az")
+        if sorting_option == "za" and self.active_sorting.inner_text() != "Name (Z to A)":
+            self.sorting_dropdown.select_option(value = "za")
+        if sorting_option == "lohi" and self.active_sorting.inner_text() != "Price (low to high)":
+            self.sorting_dropdown.select_option(value = "lohi")
+        if sorting_option == "hilo" and self.active_sorting.inner_text() != "Price (high to low)":
+            self.sorting_dropdown.select_option(value = "hilo")
+
+    def verify_sorting(self, sorting_option) -> None:
+        logger.info(f"Checking if Product Items are sorted by provided option: {sorting_option}")
+        if sorting_option not in ["az", "za", "lohi", "hilo"]:
+            raise ValueError(f"Invalid sorting option: {sorting_option}")
+
+        items = self.get_all_items()
+
+        if sorting_option == "az":
+            item_names = self.get_item_names(items)
+            assert all(item_names[i] <= item_names[i+1] for i in range(len(item_names) - 1))
+        if sorting_option == "za":
+            item_names = self.get_item_names(items)
+            assert all(item_names[i] >= item_names[i+1] for i in range(len(item_names) - 1))
+        if sorting_option == "lohi":
+            item_prices = self.get_item_prices(items)
+            print(item_prices)
+            assert all(item_prices[i] <= item_prices[i+1] for i in range(len(item_prices) - 1))
+        if sorting_option == "hilo":
+            item_prices = self.get_item_prices(items)
+            assert all(item_prices[i] >= item_prices[i+1] for i in range(len(item_prices) - 1))
