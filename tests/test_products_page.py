@@ -1,5 +1,6 @@
 from playwright.sync_api import expect
 from tests.conftest import page_manager as pm
+from  src.constants.sorting import Sorting as Sort
 
 class TestProducts:
     # TODO: move logging in to function level fixture
@@ -153,30 +154,30 @@ class TestProducts:
     def test_sorting(self, pm):
         pm.login_page.open_login_page()
         pm.login_page.login_standard_user()
-        pm.products_page.select_sorting("az")
+        pm.products_page.select_sorting(Sort.AZ)
         expect(pm.products_page.active_sorting).to_have_text("Name (A to Z)")
-        pm.products_page.verify_sorting("az")
+        pm.products_page.verify_sorting(Sort.AZ)
 
     # TODO: move logging in to function level fixture
     def test_reversed_sorting(self, pm):
         pm.login_page.open_login_page()
         pm.login_page.login_standard_user()
-        pm.products_page.select_sorting("za")
+        pm.products_page.select_sorting(Sort.ZA)
         expect(pm.products_page.active_sorting).to_have_text("Name (Z to A)")
-        pm.products_page.verify_sorting("za")
+        pm.products_page.verify_sorting(Sort.ZA)
 
     # TODO: move logging in to function level fixture
     def test_low_high_price_sorting(self, pm):
         pm.login_page.open_login_page()
         pm.login_page.login_standard_user()
-        pm.products_page.select_sorting("lohi")
+        pm.products_page.select_sorting(Sort.LOHI)
         expect(pm.products_page.active_sorting).to_have_text("Price (low to high)")
-        pm.products_page.verify_sorting("lohi")
+        pm.products_page.verify_sorting(Sort.LOHI)
 
     # TODO: move logging in to function level fixture
     def test_high_low_price_sorting(self, pm):
         pm.login_page.open_login_page()
         pm.login_page.login_standard_user()
-        pm.products_page.select_sorting("hilo")
+        pm.products_page.select_sorting(Sort.HILO)
         expect(pm.products_page.active_sorting).to_have_text("Price (high to low)")
-        pm.products_page.verify_sorting("hilo")
+        pm.products_page.verify_sorting(Sort.HILO)

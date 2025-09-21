@@ -66,34 +66,22 @@ class ProductsPage(BasePage):
 
     def select_sorting(self, sorting_option) -> None:
         logger.info(f"Applying provided sorting to Product Items on the page: {sorting_option}")
-        if sorting_option not in ["az", "za", "lohi", "hilo"]:
-            raise ValueError(f"Invalid sorting option: {sorting_option}")
-        if sorting_option == "az" and self.active_sorting.inner_text() != "Name (A to Z)":
-            self.sorting_dropdown.select_option(value = "az")
-        if sorting_option == "za" and self.active_sorting.inner_text() != "Name (Z to A)":
-            self.sorting_dropdown.select_option(value = "za")
-        if sorting_option == "lohi" and self.active_sorting.inner_text() != "Price (low to high)":
-            self.sorting_dropdown.select_option(value = "lohi")
-        if sorting_option == "hilo" and self.active_sorting.inner_text() != "Price (high to low)":
-            self.sorting_dropdown.select_option(value = "hilo")
+        self.sorting_dropdown.select_option(value = sorting_option.value)
 
     def verify_sorting(self, sorting_option) -> None:
         logger.info(f"Checking if Product Items are sorted by provided option: {sorting_option}")
-        if sorting_option not in ["az", "za", "lohi", "hilo"]:
-            raise ValueError(f"Invalid sorting option: {sorting_option}")
 
         items = self.get_all_items()
-
-        if sorting_option == "az":
-            item_names = self.get_item_names(items)
-            assert all(item_names[i] <= item_names[i+1] for i in range(len(item_names) - 1))
-        if sorting_option == "za":
-            item_names = self.get_item_names(items)
-            assert all(item_names[i] >= item_names[i+1] for i in range(len(item_names) - 1))
-        if sorting_option == "lohi":
-            item_prices = self.get_item_prices(items)
-            print(item_prices)
-            assert all(item_prices[i] <= item_prices[i+1] for i in range(len(item_prices) - 1))
-        if sorting_option == "hilo":
-            item_prices = self.get_item_prices(items)
-            assert all(item_prices[i] >= item_prices[i+1] for i in range(len(item_prices) - 1))
+        match sorting_option.value:
+            case "az":
+                item_names = self.get_item_names(items)
+                assert all(item_names[i] <= item_names[i+1] for i in range(len(item_names) - 1))
+            case "za":
+                item_names = self.get_item_names(items)
+                assert all(item_names[i] >= item_names[i + 1] for i in range(len(item_names) - 1))
+            case "lohi":
+                item_prices = self.get_item_prices(items)
+                assert all(item_prices[i] <= item_prices[i + 1] for i in range(len(item_prices) - 1))
+            case "hilo":
+                item_prices = self.get_item_prices(items)
+                assert all(item_prices[i] >= item_prices[i + 1] for i in range(len(item_prices) - 1))
