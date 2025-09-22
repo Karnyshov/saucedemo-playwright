@@ -1,7 +1,9 @@
 from playwright.sync_api import expect
 from tests.conftest import page_manager as pm
+from  src.constants.sorting import Sorting as Sort
 
 class TestProducts:
+    # TODO: move logging in to function level fixture
     #TODO: add more checks
     def test_basic_state(self, pm):
         pm.login_page.open_login_page()
@@ -11,12 +13,12 @@ class TestProducts:
         pm.products_page.verify_footer_twitter()
         pm.products_page.verify_footer_facebook()
         pm.products_page.verify_footer_linkedin()
-        expect(pm.products_page.shopping_cart).to_be_visible()
-        expect(pm.products_page.shopping_cart_count).not_to_be_visible()
+        pm.products_page.verify_empty_cart()
+        expect(pm.products_page.active_sorting).to_have_text("Name (A to Z)")
         expect(pm.products_page.products_page_title).to_have_text("Products")
         expect(pm.products_page.product_item_element).not_to_have_count(0)
 
-
+    # TODO: move logging in to function level fixture
     def test_footer_twitter(self, pm):
         pm.login_page.open_login_page()
         pm.login_page.login_standard_user()
@@ -25,6 +27,7 @@ class TestProducts:
         expect(pm.twitter_page.page).to_have_url("https://x.com/saucelabs")
         expect(pm.twitter_page.page).to_have_title("Sauce Labs (@saucelabs) / X")
 
+    # TODO: move logging in to function level fixture
     def test_footer_facebook(self, pm):
         pm.login_page.open_login_page()
         pm.login_page.login_standard_user()
@@ -33,6 +36,7 @@ class TestProducts:
         expect(pm.facebook_page.page).to_have_url("https://www.facebook.com/saucelabs")
         expect(pm.facebook_page.page).to_have_title("Sauce Labs | Facebook")
 
+    # TODO: move logging in to function level fixture
     def test_footer_linkedin(self, pm):
         pm.login_page.open_login_page()
         pm.login_page.login_standard_user()
@@ -41,6 +45,7 @@ class TestProducts:
         expect(pm.linkedin_page.page).to_have_url("https://www.linkedin.com/company/sauce-labs/")
         expect(pm.linkedin_page.page).to_have_title("Sauce Labs | LinkedIn")
 
+    # TODO: move logging in to function level fixture
     def test_burger_menu(self, pm):
         pm.login_page.open_login_page()
         pm.login_page.login_standard_user()
@@ -51,6 +56,7 @@ class TestProducts:
         pm.products_page.verify_burger_menu_closed()
 
     #TODO: add check if menu already opened?
+    # TODO: move logging in to function level fixture
     def test_burger_menu_all_items(self, pm):
         pm.login_page.open_login_page()
         pm.login_page.login_standard_user()
@@ -58,6 +64,7 @@ class TestProducts:
         expect(pm.products_page.burger_menu_all_items).to_have_attribute("href","#")
         pm.products_page.burger_menu_all_items.click()
 
+    # TODO: move logging in to function level fixture
     def test_burger_menu_about(self, pm):
         pm.login_page.open_login_page()
         pm.login_page.login_standard_user()
@@ -67,6 +74,7 @@ class TestProducts:
         expect(pm.about_page.page).to_have_url("https://saucelabs.com/")
         expect(pm.about_page.page).to_have_title("Sauce Labs: Cross Browser Testing, Selenium Testing & Mobile Testing")
 
+    # TODO: move logging in to function level fixture
     def test_burger_menu_logout(self, pm):
         pm.login_page.open_login_page()
         pm.login_page.login_standard_user()
@@ -76,19 +84,21 @@ class TestProducts:
         expect(pm.login_page.page).to_have_url("https://www.saucedemo.com/")
         expect(pm.login_page.page).to_have_title("Swag Labs")
 
+    # TODO: move logging in to function level fixture
     def test_get_all_items(self, pm):
         pm.login_page.open_login_page()
         pm.login_page.login_standard_user()
         items = pm.products_page.get_all_items()
         pm.products_page.verify_product_items(items)
 
+    # TODO: move logging in to function level fixture
     def test_random_item(self, pm):
         pm.login_page.open_login_page()
         pm.login_page.login_standard_user()
         item = pm.products_page.get_random_item()
         item.verify_product_item()
 
-    # TODO: move logging to function level fixture
+    # TODO: move logging in to function level fixture
     def test_add_to_cart_single_item(self, pm):
         pm.login_page.open_login_page()
         pm.login_page.login_standard_user()
@@ -97,7 +107,7 @@ class TestProducts:
         item.add_to_cart()
         item.verify_item_added_to_cart()
 
-    # TODO: move logging to function level fixture
+    # TODO: move logging in to function level fixture
     def test_remove_from_cart_single_item(self, pm):
         pm.login_page.open_login_page()
         pm.login_page.login_standard_user()
@@ -108,7 +118,7 @@ class TestProducts:
         item.remove_from_cart()
         item.verify_item_removed_from_cart()
 
-    # TODO: move logging to function level fixture
+    # TODO: move logging in to function level fixture
     def test_add_to_cart_multi_items(self, pm):
         pm.login_page.open_login_page()
         pm.login_page.login_standard_user()
@@ -121,7 +131,7 @@ class TestProducts:
         item2.verify_item_added_to_cart()
         expect(pm.products_page.shopping_cart_count).to_have_text("2")
 
-    # TODO: move logging to function level fixture
+    # TODO: move logging in to function level fixture
     def test_remove_from_cart_multi_items(self, pm):
         pm.login_page.open_login_page()
         pm.login_page.login_standard_user()
@@ -139,3 +149,35 @@ class TestProducts:
         item2.remove_from_cart()
         item2.verify_item_removed_from_cart()
         expect(pm.products_page.shopping_cart_count).not_to_be_visible()
+
+    # TODO: move logging in to function level fixture
+    def test_sorting(self, pm):
+        pm.login_page.open_login_page()
+        pm.login_page.login_standard_user()
+        pm.products_page.select_sorting(Sort.AZ)
+        expect(pm.products_page.active_sorting).to_have_text("Name (A to Z)")
+        pm.products_page.verify_sorting(Sort.AZ)
+
+    # TODO: move logging in to function level fixture
+    def test_reversed_sorting(self, pm):
+        pm.login_page.open_login_page()
+        pm.login_page.login_standard_user()
+        pm.products_page.select_sorting(Sort.ZA)
+        expect(pm.products_page.active_sorting).to_have_text("Name (Z to A)")
+        pm.products_page.verify_sorting(Sort.ZA)
+
+    # TODO: move logging in to function level fixture
+    def test_low_high_price_sorting(self, pm):
+        pm.login_page.open_login_page()
+        pm.login_page.login_standard_user()
+        pm.products_page.select_sorting(Sort.LOHI)
+        expect(pm.products_page.active_sorting).to_have_text("Price (low to high)")
+        pm.products_page.verify_sorting(Sort.LOHI)
+
+    # TODO: move logging in to function level fixture
+    def test_high_low_price_sorting(self, pm):
+        pm.login_page.open_login_page()
+        pm.login_page.login_standard_user()
+        pm.products_page.select_sorting(Sort.HILO)
+        expect(pm.products_page.active_sorting).to_have_text("Price (high to low)")
+        pm.products_page.verify_sorting(Sort.HILO)
