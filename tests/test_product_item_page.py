@@ -58,10 +58,19 @@ class TestProductItem:
         expect(pm.login_page.page).to_have_title("Swag Labs")
 
     def test_add_to_cart(self, pm, item):
-        pass
+        expect(pm.products_page.shopping_cart_count).not_to_be_visible()
+        pm.product_item_page.add_to_cart()
+        pm.product_item_page.verify_item_added_to_cart()
+        expect(pm.product_item_page.shopping_cart_count).to_have_text("1")
 
     def test_remove_from_cart(self, pm, item):
-        pass
+        expect(pm.products_page.shopping_cart_count).not_to_be_visible()
+        pm.product_item_page.add_to_cart()
+        pm.product_item_page.verify_item_added_to_cart()
+        expect(pm.product_item_page.shopping_cart_count).to_have_text("1")
+        pm.product_item_page.remove_from_cart()
+        pm.product_item_page.verify_item_removed_from_cart()
+        expect(pm.products_page.shopping_cart_count).not_to_be_visible()
 
     def test_back_to_products(self, pm, item):
         pass

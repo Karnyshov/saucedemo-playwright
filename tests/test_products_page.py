@@ -81,6 +81,7 @@ class TestProducts:
         item.verify_item_added_to_cart()
         item.remove_from_cart()
         item.verify_item_removed_from_cart()
+        expect(pm.products_page.shopping_cart_count).not_to_be_visible()
 
     def test_add_to_cart_multi_items(self, pm, login):
         item1 = pm.products_page.get_item(0)
