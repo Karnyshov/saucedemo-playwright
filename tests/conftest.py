@@ -6,3 +6,17 @@ from src.client.sausedemo_ui import SauceDemoUI
 def page_manager(page: Page):
     pages_manager = SauceDemoUI(page)
     yield pages_manager
+
+@pytest.fixture(scope = "function")
+def login_user(page_manager):
+    page_manager.login_page.open_login_page()
+    page_manager.login_page.login_standard_user()
+    yield page_manager
+
+@pytest.fixture(scope = "function")
+def open_random_item(page_manager):
+    page_manager.login_page.open_login_page()
+    page_manager.login_page.login_standard_user()
+    item = page_manager.products_page.get_random_item()
+    page_manager.products_page.open_item_page(item.item_name_link)
+    yield item

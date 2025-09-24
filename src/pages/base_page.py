@@ -83,5 +83,10 @@ class BasePage(abc.ABC):
         expect(self.footer_linkedin).to_have_text("LinkedIn")
 
     def verify_empty_cart(self):
+        logger.info(f"Checking cart is empty and count is absent")
         expect(self.shopping_cart).to_be_visible()
         expect(self.shopping_cart_count).not_to_be_visible()
+
+    def open_cart_page(self):
+        logger.info(f"Opening Cart page")
+        self.shopping_cart.click()

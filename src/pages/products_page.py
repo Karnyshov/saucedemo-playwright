@@ -1,5 +1,5 @@
 import random
-from playwright.sync_api import Page, expect
+from playwright.sync_api import Page
 from src.pages.base_page import BasePage
 from src.pages.product_item import ProductItem
 from utils.logger import logger
@@ -85,3 +85,8 @@ class ProductsPage(BasePage):
             case "hilo":
                 item_prices = self.get_item_prices(items)
                 assert all(item_prices[i] >= item_prices[i + 1] for i in range(len(item_prices) - 1))
+
+    @staticmethod
+    def open_item_page(locator) -> None:
+        logger.info(f"Opening Item Details page by locator (image/name): {locator}")
+        locator.click()

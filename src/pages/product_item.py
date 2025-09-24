@@ -14,9 +14,13 @@ class ProductItem(BasePage):
         self.item_name_link = base_locator.locator("//div[@class=\"inventory_item_label\"]/a")
         self.description = base_locator.locator("//div[@class=\"inventory_item_desc\"]")
         self.price = base_locator.locator("//div[@class=\"inventory_item_price\"]")
-        self.price_text = self.price.text_content()
         self.add_button = base_locator.locator("//button[@class=\"btn btn_primary btn_small btn_inventory \"]")
         self.remove_button = base_locator.locator("//button[@class=\"btn btn_secondary btn_small btn_inventory \"]")
+
+        self.price_text = self.price.text_content()
+        self.item_name_text = self.item_name.text_content()
+        self.description_text =  self.description.text_content()
+        self.image_src = self.image.get_attribute("src")
 
     def verify_product_item(self) -> None:
         logger.info("Verifying given Product Item")
