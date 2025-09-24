@@ -3,7 +3,6 @@ from tests.conftest import page_manager as pm
 from tests.conftest import open_random_item as item
 
 class TestProductItem:
-    #TODO: add more checks
     def test_basic_state(self, pm, item):
         pm.product_item_page.verify_burger_menu_closed()
         pm.product_item_page.verify_copyright()
@@ -11,6 +10,9 @@ class TestProductItem:
         pm.product_item_page.verify_footer_facebook()
         pm.product_item_page.verify_footer_linkedin()
         pm.product_item_page.verify_empty_cart()
+        pm.product_item_page.verify_basic_state()
+        pm.product_item_page.verify_url()
+        expect(pm.product_item_page.back_to_products_button).to_be_visible()
 
     def test_footer_twitter(self, pm, item):
         pm.product_item_page.verify_footer_twitter()
@@ -73,7 +75,20 @@ class TestProductItem:
         expect(pm.products_page.shopping_cart_count).not_to_be_visible()
 
     def test_back_to_products(self, pm, item):
-        pass
+        expect(pm.product_item_page.back_to_products_button).to_be_visible()
+        pm.product_item_page.back_to_products_page()
+        expect(pm.products_page.page).to_have_url("https://www.saucedemo.com/inventory.html")
+
+    def test_open_cart_page(self, pm, item):
+        expect(pm.products_page.shopping_cart_count).not_to_be_visible()
+        pm.product_item_page.add_to_cart()
+        pm.product_item_page.verify_item_added_to_cart()
+        expect(pm.product_item_page.shopping_cart_count).to_have_text("1")
+        pm.product_item_page.open_cart_page()
+        expect(pm.cart_page.page).to_have_url("https://www.saucedemo.com/cart.html")
 
     def test_content_consistency(self, pm, item):
-        pass
+        expect(pm.product_item_page.price).to_have_text(item.price_text)
+        expect(pm.product_item_page.item_name).to_have_text(item.item_name_text)
+        expect(pm.product_item_page.description).to_have_text(item.description_text)
+        expect(pm.product_item_page.image).to_have_attribute("src", item.image_src)

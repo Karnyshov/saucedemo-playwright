@@ -128,3 +128,12 @@ class TestProducts:
         pm.products_page.select_sorting(Sort.HILO)
         expect(pm.products_page.active_sorting).to_have_text("Price (high to low)")
         pm.products_page.verify_sorting(Sort.HILO)
+
+    def test_open_cart_page(self, pm, login):
+        expect(pm.products_page.shopping_cart_count).not_to_be_visible()
+        item = pm.products_page.get_random_item()
+        item.add_to_cart()
+        item.verify_item_added_to_cart()
+        expect(pm.products_page.shopping_cart_count).to_have_text("1")
+        pm.products_page.open_cart_page()
+        expect(pm.cart_page.page).to_have_url("https://www.saucedemo.com/cart.html")
