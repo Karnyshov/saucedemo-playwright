@@ -17,6 +17,6 @@ def login_user(page_manager):
 def open_random_item(page_manager):
     page_manager.login_page.open_login_page()
     page_manager.login_page.login_standard_user()
-    item = page_manager.products_page.get_random_item()
+    item = page_manager.products_page.get_item(0)
     page_manager.products_page.open_item_page(item.item_name_link)
     yield item

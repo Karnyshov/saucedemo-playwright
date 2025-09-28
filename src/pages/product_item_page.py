@@ -1,15 +1,13 @@
 from playwright.sync_api import Page, expect
 from src.pages.base_page import BasePage
 from utils.logger import logger
-from urllib.parse import urljoin
 import re
 
-
+#TODO: make a file with URIs
 class ItemPage(BasePage):
     def __init__(self, page: Page) -> None:
         super().__init__(page)
         self.page = page
-        #self.page_url = urljoin(self.base_url, "inventory-item.html")
         self.image = page.locator("//img[@class=\"inventory_details_img\"]")
         self.item_name = page.locator("//div[@class=\"inventory_details_name large_size\"]")
         self.description = page.locator("//div[@class=\"inventory_details_desc large_size\"]")
@@ -51,6 +49,6 @@ class ItemPage(BasePage):
         expect(self.price).to_have_text(re.compile(r"^\$(\d{1,3}([ ,.]?\d{3})*|\d+)([.,]\d{1,2})?$"))
         expect(self.add_button).to_be_visible()
 
-    def verify_url(self):
-        logger.info(f"Checking page URL is valid: {self.page.url}")
-        expect(self.page).to_have_url(re.compile("^https?://(www\.)?saucedemo\.com/inventory-item\.html\?id=\d+$"))
+    def verify_url(self, item_id):
+        logger.info(f"Checking page URL has is valid and has id from given attribute: {item_id} and URI: {self.page.url}")
+        expect(self.page).to_have_url(f"https://www.saucedemo.com/inventory-item.html?id={item_id}")

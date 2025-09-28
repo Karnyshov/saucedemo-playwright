@@ -11,7 +11,7 @@ class TestProductItem:
         pm.product_item_page.verify_footer_linkedin()
         pm.product_item_page.verify_empty_cart()
         pm.product_item_page.verify_basic_state()
-        pm.product_item_page.verify_url()
+        pm.product_item_page.verify_url(item.item_id)
         expect(pm.product_item_page.back_to_products_button).to_be_visible()
 
     def test_footer_twitter(self, pm, item):
