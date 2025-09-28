@@ -14,9 +14,15 @@ class ProductItem(BasePage):
         self.item_name_link = base_locator.locator("//div[@class=\"inventory_item_label\"]/a")
         self.description = base_locator.locator("//div[@class=\"inventory_item_desc\"]")
         self.price = base_locator.locator("//div[@class=\"inventory_item_price\"]")
-        self.price_text = self.price.text_content()
         self.add_button = base_locator.locator("//button[@class=\"btn btn_primary btn_small btn_inventory \"]")
         self.remove_button = base_locator.locator("//button[@class=\"btn btn_secondary btn_small btn_inventory \"]")
+
+        self.item_id = self.get_item_id()
+        self.price_text = self.price.text_content()
+        self.item_name_text = self.item_name.text_content()
+        self.description_text =  self.description.text_content()
+        self.image_src = self.image.get_attribute("src")
+
 
     def verify_product_item(self) -> None:
         logger.info("Verifying given Product Item")
@@ -48,3 +54,7 @@ class ProductItem(BasePage):
         logger.info("Verifying item is added to cart: add button replaces remove button")
         expect(self.add_button).to_be_visible()
         expect(self.remove_button).not_to_be_visible()
+
+    def get_item_id(self):
+        attribute = self.item_name_link.get_attribute("id")
+        return attribute.split("_")[1]
