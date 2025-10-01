@@ -90,3 +90,7 @@ class ProductsPage(BasePage):
     def open_item_page(locator) -> None:
         logger.info(f"Opening Item Details page by locator (image/name): {locator}")
         locator.click()
+
+    def open_cart_page(self) -> None:
+        logger.info(f"Opening Cart page")
+        self.shopping_cart.click()

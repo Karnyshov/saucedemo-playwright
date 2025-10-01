@@ -14,9 +14,25 @@ def login_user(page_manager):
     yield page_manager
 
 @pytest.fixture(scope = "function")
-def open_random_item(page_manager):
+def open_first_item(page_manager):
     page_manager.login_page.open_login_page()
     page_manager.login_page.login_standard_user()
     item = page_manager.products_page.get_item(0)
     page_manager.products_page.open_item_page(item.item_name_link)
     yield item
+
+@pytest.fixture(scope = "function")
+def open_cart_with_item(page_manager):
+    page_manager.login_page.open_login_page()
+    page_manager.login_page.login_standard_user()
+    item = page_manager.products_page.get_item(0)
+    item.add_to_cart()
+    page_manager.products_page.open_cart_page()
+    yield item
+
+@pytest.fixture(scope = "function")
+def open_empty_cart(page_manager):
+    page_manager.login_page.open_login_page()
+    page_manager.login_page.login_standard_user()
+    page_manager.products_page.open_cart_page()
+    yield page_manager
