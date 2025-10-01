@@ -20,3 +20,18 @@ class CartPage(BasePage):
         self.item_description = page.locator("//div[@class=\"inventory_item_desc\"]")
         self.item_price = page.locator("//div[@class=\"inventory_item_price\"]")
         self.remove_button = page.locator("//button[@id=\"remove-sauce-labs-bike-light\"]")
+
+    def remove_item(self) -> None:
+        logger.info("Removing item from cart")
+        self.remove_button.click()
+
+    def open_checkout_page(self) -> None:
+        logger.info("Opening Checkout page")
+        self.checkout_button.click()
+
+    def open_products_page(self) -> None:
+        logger.info("Returning to Products Page")
+        self.continue_shopping_button.click()
+
+    def verify_removed_item(self) -> None:
+        logger.info("Checking item was removed and cart is empty (if 1 item was added)")
