@@ -62,6 +62,14 @@ class BasePage(abc.ABC):
 
         return new_page_info.value
 
+    def open_about_page(self) -> None:
+        logger.info(f"Opening About page from burger menu")
+        self.burger_menu_about.click()
+
+    def logout(self) -> None:
+        logger.info(f"Logging out as current user")
+        self.burger_menu_logout.click()
+
     def verify_copyright(self) -> None:
         logger.info(f"Checking copyright text is present")
         expect(self.footer_copyright).not_to_be_empty()
