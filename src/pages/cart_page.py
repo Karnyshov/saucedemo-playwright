@@ -32,7 +32,7 @@ class CartPage(BasePage):
         self.continue_shopping_button.click()
 
     def verify_empty_cart(self) -> None:
-        logger.info("Checking item was removed and cart is empty (if 1 item was added)")
+        logger.info("Checking item was removed and cart is empty")
         expect(self.item_quantity).not_to_be_visible()
         expect(self.item_name).not_to_be_visible()
         expect(self.item_description).not_to_be_visible()

@@ -22,6 +22,7 @@ class TestCart:
         expect(pm.cart_page.item_container).to_be_visible()
         expect(pm.cart_page.remove_button).to_be_visible()
         expect(pm.cart_page.remove_button).to_have_text("Remove")
+        expect(pm.cart_page.shopping_cart_count).to_have_text("1")
 
     def test_footer_twitter(self, pm, cart):
         pm.cart_page.verify_footer_twitter()
@@ -77,12 +78,14 @@ class TestCart:
         expect(pm.checkout_info_page.page).to_have_url("https://www.saucedemo.com/checkout-step-one.html")
 
     def test_remove_single_item_from_cart(self, pm, cart):
+        expect(pm.cart_page.shopping_cart_count).to_have_text("1")
         item = pm.cart_page.get_item(0)
         item.verify_cart_item()
         item.remove_item()
         pm.cart_page.verify_empty_cart()
 
     def test_remove_item_from_cart(self, pm, cart_items):
+        expect(pm.cart_page.shopping_cart_count).to_have_text("2")
         item2 = pm.cart_page.get_item(1)
         item2.remove_item()
         item2.verify_removed_item()
@@ -90,9 +93,11 @@ class TestCart:
 
     def test_content_consistency(self, pm, cart):
         item = pm.cart_page.get_item(0)
+        expect(pm.cart_page.shopping_cart_count).to_have_text("1")
         item.verify_content(cart)
 
     def test_content_consistency_two_items(self, pm, cart_items):
+        expect(pm.cart_page.shopping_cart_count).to_have_text("2")
         item1 = pm.cart_page.get_item(0)
         item1.verify_content(cart_items[0])
         item2 = pm.cart_page.get_item(1)
