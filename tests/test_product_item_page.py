@@ -1,6 +1,6 @@
 from playwright.sync_api import expect
 from tests.conftest import page_manager as pm
-from tests.conftest import open_random_item as item
+from tests.conftest import open_first_item as item
 
 class TestProductItem:
     def test_basic_state(self, pm, item):
