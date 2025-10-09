@@ -96,5 +96,5 @@ class BasePage(abc.ABC):
         expect(self.shopping_cart_count).not_to_be_visible()
 
     def open_cart_page(self):
-        logger.info(f"Opening Cart page")
+        logger.info(f"Opening Cart page by clicking Cart button")
         self.shopping_cart.click()

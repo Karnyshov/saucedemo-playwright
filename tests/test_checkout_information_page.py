@@ -69,14 +69,16 @@ class TestCheckoutInfo:
         pm.checkout_info_page.cancel_checkout()
         expect(pm.cart_page.page).to_have_url("https://www.saucedemo.com/cart.html")
 
-    #TODO: move clicking to Base Page
     def test_open_cart(self, pm, checkout):
-        pm.checkout_info_page.shopping_cart.click()
+        pm.checkout_info_page.open_cart_page()
         expect(pm.cart_page.page).to_have_url("https://www.saucedemo.com/cart.html")
 
     def test_open_checkout_overview(self, pm, checkout):
+        pm.checkout_info_page.input_first_name(fake.first_name())
+        pm.checkout_info_page.input_last_name(fake.last_name())
+        pm.checkout_info_page.input_postal_code(fake.postalcode())
         pm.checkout_info_page.continue_checkout()
-        pass
+        expect(pm.checkout_overview_page.page).to_have_url("https://www.saucedemo.com/checkout-step-two.html")
 
     def test_shipping_info_required(self, pm, checkout):
         pm.checkout_info_page.continue_checkout()
