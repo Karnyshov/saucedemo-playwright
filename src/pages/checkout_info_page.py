@@ -14,6 +14,35 @@ class CheckoutInfoPage(BasePage):
         self.last_name_field = page.locator("//input[@id=\"last-name\"]")
         self.postal_code_field = page.locator("//input[@id=\"postal-code\"]")
 
+        self.error_message = page.locator("//div[@class=\"error-message-container error\"]")
+        self.error_message_close_button = page.locator("//button[@class=\"error-button\"]")
+        self.error_sign_first_name = page.locator("//div[@class='form_group'][1]/*[2]")
+        #self.error_sign_first_name = page.locator("\.form_group input[name='firstName'] + svg")
+        self.error_sign_last_name = page.locator("//div[@class='form_group'][2]/*[2]")
+        self.error_sign_postal_code = page.locator("//div[@class='form_group'][3]/*[2]")
+
+    def verify_input_error_state(self):
+        logger.info("Checking elements when input validation failed")
+        expect(self.error_sign_first_name).to_be_visible()
+        expect(self.error_sign_last_name).to_be_visible()
+        expect(self.error_sign_postal_code).to_be_visible()
+        expect(self.error_message).not_to_be_empty()
+        expect(self.error_message_close_button).to_be_visible()
+        expect(self.first_name_field).to_have_css("border-bottom-color","rgb(226, 35, 26)")
+        expect(self.last_name_field).to_have_css("border-bottom-color","rgb(226, 35, 26)")
+        expect(self.postal_code_field).to_have_css("border-bottom-color","rgb(226, 35, 26)")
+
+    def verify_basic_input_state(self):
+        logger.info("Checking elements of form without input")
+        expect(self.error_sign_first_name).not_to_be_visible()
+        expect(self.error_sign_last_name).not_to_be_visible()
+        expect(self.error_sign_postal_code).not_to_be_visible()
+        expect(self.error_message).not_to_be_visible()
+        expect(self.error_message_close_button).not_to_be_visible()
+        expect(self.first_name_field).not_to_have_css("border-bottom-color","rgb(226, 35, 26)")
+        expect(self.last_name_field).not_to_have_css("border-bottom-color","rgb(226, 35, 26)")
+        expect(self.postal_code_field).not_to_have_css("border-bottom-color","rgb(226, 35, 26)")
+
     def verify_first_name_field(self):
         logger.info("Checking First Name field: visibility, placeholder")
         expect(self.first_name_field).to_be_visible()

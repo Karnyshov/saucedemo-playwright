@@ -1,6 +1,7 @@
 from playwright.sync_api import expect
 from tests.conftest import page_manager as pm
 from tests.conftest import open_checkout_info_page as checkout
+from utils.faker import fake
 
 class TestCheckoutInfo:
     def test_basic_state(self, pm, checkout):
@@ -14,6 +15,7 @@ class TestCheckoutInfo:
         pm.checkout_info_page.verify_postal_code_field()
         pm.checkout_info_page.verify_cancel_button()
         pm.checkout_info_page.verify_continue_button()
+        pm.checkout_info_page.verify_basic_input_state()
         expect(pm.checkout_info_page.page_title).to_have_text("Checkout: Your Information")
         expect(pm.checkout_info_page.shopping_cart_count).to_have_text("1")
         expect(pm.checkout_info_page.shopping_cart).to_be_visible()
@@ -77,19 +79,39 @@ class TestCheckoutInfo:
         pass
 
     def test_shipping_info_required(self, pm, checkout):
-        pass
+        pm.checkout_info_page.continue_checkout()
+        pm.checkout_info_page.verify_input_error_state()
+        expect(pm.checkout_info_page.error_message).to_have_text("Error: First Name is required")
 
     def test_first_name_required(self, pm, checkout):
-        pass
+        pm.checkout_info_page.input_last_name(fake.last_name())
+        pm.checkout_info_page.input_postal_code(fake.postalcode())
+        pm.checkout_info_page.continue_checkout()
+        pm.checkout_info_page.verify_input_error_state()
+        expect(pm.checkout_info_page.error_message).to_have_text("Error: First Name is required")
 
     def test_last_name_required(self, pm, checkout):
-        pass
+        pm.checkout_info_page.input_first_name(fake.first_name())
+        pm.checkout_info_page.input_postal_code(fake.postalcode())
+        pm.checkout_info_page.continue_checkout()
+        pm.checkout_info_page.verify_input_error_state()
+        expect(pm.checkout_info_page.error_message).to_have_text("Error: Last Name is required")
 
     def test_postal_code_required(self, pm, checkout):
-        pass
+        pm.checkout_info_page.input_first_name(fake.first_name())
+        pm.checkout_info_page.input_last_name(fake.last_name())
+        pm.checkout_info_page.continue_checkout()
+        pm.checkout_info_page.verify_input_error_state()
+        expect(pm.checkout_info_page.error_message).to_have_text("Error: Postal Code is required")
 
     def test_last_name_postal_code_required(self, pm, checkout):
-        pass
+        pm.checkout_info_page.input_first_name(fake.first_name())
+        pm.checkout_info_page.continue_checkout()
+        pm.checkout_info_page.verify_input_error_state()
+        expect(pm.checkout_info_page.error_message).to_have_text("Error: Last Name is required")
     
     def test_first_name_postal_code_required(self, pm, checkout):
-        pass
+        pm.checkout_info_page.input_last_name(fake.last_name())
+        pm.checkout_info_page.continue_checkout()
+        pm.checkout_info_page.verify_input_error_state()
+        expect(pm.checkout_info_page.error_message).to_have_text("Error: First Name is required")
