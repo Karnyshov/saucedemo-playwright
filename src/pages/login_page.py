@@ -10,15 +10,10 @@ class LoginPage(BasePage):
         self.page = page
 
         self.logo = page.locator("//div[@class='login_logo']")
-        #self.username_field = page.locator("//form/div[1]/input")
         self.username_field = page.locator("//input[@id=\"user-name\"]")
-        #self.password_field = page.locator("//form/div[2]/input")
         self.password_field = page.locator("//input[@id=\"password\"]")
-        #self.login_button = page.locator("//form/input")
         self.login_button = page.locator("//input[@id=\"login-button\"]")
-        #self.error_message_container = page.locator("//form/div[3]")
         self.error_message_container = page.locator("//div[@class='error-message-container error']")
-        #self.error_message_close_button = page.locator("//form/div[3]/h3/button")
         self.error_message_close_button = page.locator("//button[@class='error-button']")
         self.error_message = page.locator("//form/div[3]/h3")
         self.error_sign_username = page.locator("//form/div[1]/*[2]")
