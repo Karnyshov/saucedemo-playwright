@@ -16,8 +16,8 @@ class CheckoutInfoPage(BasePage):
 
         self.error_message = page.locator("//div[@class=\"error-message-container error\"]")
         self.error_message_close_button = page.locator("//button[@class=\"error-button\"]")
-        self.error_sign_first_name = page.locator("//div[@class='form_group'][1]/*[2]")
-        #self.error_sign_first_name = page.locator("\.form_group input[name='firstName'] + svg")
+        #self.error_sign_first_name = page.locator("//div[@class='form_group'][1]/*[2]")
+        self.error_sign_first_name = page.locator(".form_group input[name='firstName'] + svg")
         self.error_sign_last_name = page.locator("//div[@class='form_group'][2]/*[2]")
         self.error_sign_postal_code = page.locator("//div[@class='form_group'][3]/*[2]")
 

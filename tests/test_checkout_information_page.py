@@ -5,11 +5,11 @@ from utils.faker import fake
 
 class TestCheckoutInfo:
     def test_basic_state(self, pm, checkout):
-        pm.cart_page.verify_burger_menu_closed()
-        pm.cart_page.verify_copyright()
-        pm.cart_page.verify_footer_twitter()
-        pm.cart_page.verify_footer_facebook()
-        pm.cart_page.verify_footer_linkedin()
+        pm.checkout_info_page.verify_burger_menu_closed()
+        pm.checkout_info_page.verify_copyright()
+        pm.checkout_info_page.verify_footer_twitter()
+        pm.checkout_info_page.verify_footer_facebook()
+        pm.checkout_info_page.verify_footer_linkedin()
         pm.checkout_info_page.verify_last_name_field()
         pm.checkout_info_page.verify_last_name_field()
         pm.checkout_info_page.verify_postal_code_field()
@@ -86,34 +86,42 @@ class TestCheckoutInfo:
         expect(pm.checkout_info_page.error_message).to_have_text("Error: First Name is required")
 
     def test_first_name_required(self, pm, checkout):
-        pm.checkout_info_page.input_last_name(fake.last_name())
-        pm.checkout_info_page.input_postal_code(fake.postalcode())
+        pm.checkout_info_page.input_last_name(last_name := fake.last_name())
+        expect(pm.checkout_info_page.last_name_field).to_have_value(last_name)
+        pm.checkout_info_page.input_postal_code(postal_code := fake.postalcode())
+        expect(pm.checkout_info_page.postal_code_field).to_have_value(postal_code)
         pm.checkout_info_page.continue_checkout()
         pm.checkout_info_page.verify_input_error_state()
         expect(pm.checkout_info_page.error_message).to_have_text("Error: First Name is required")
 
     def test_last_name_required(self, pm, checkout):
-        pm.checkout_info_page.input_first_name(fake.first_name())
-        pm.checkout_info_page.input_postal_code(fake.postalcode())
+        pm.checkout_info_page.input_first_name(first_name := fake.first_name())
+        expect(pm.checkout_info_page.first_name_field).to_have_value(first_name)
+        pm.checkout_info_page.input_postal_code(postal_code := fake.postalcode())
+        expect(pm.checkout_info_page.postal_code_field).to_have_value(postal_code)
         pm.checkout_info_page.continue_checkout()
         pm.checkout_info_page.verify_input_error_state()
         expect(pm.checkout_info_page.error_message).to_have_text("Error: Last Name is required")
 
     def test_postal_code_required(self, pm, checkout):
-        pm.checkout_info_page.input_first_name(fake.first_name())
-        pm.checkout_info_page.input_last_name(fake.last_name())
+        pm.checkout_info_page.input_first_name(first_name := fake.first_name())
+        expect(pm.checkout_info_page.first_name_field).to_have_value(first_name)
+        pm.checkout_info_page.input_last_name(last_name := fake.last_name())
+        expect(pm.checkout_info_page.last_name_field).to_have_value(last_name)
         pm.checkout_info_page.continue_checkout()
         pm.checkout_info_page.verify_input_error_state()
         expect(pm.checkout_info_page.error_message).to_have_text("Error: Postal Code is required")
 
     def test_last_name_postal_code_required(self, pm, checkout):
-        pm.checkout_info_page.input_first_name(fake.first_name())
+        pm.checkout_info_page.input_first_name(first_name := fake.first_name())
+        expect(pm.checkout_info_page.first_name_field).to_have_value(first_name)
         pm.checkout_info_page.continue_checkout()
         pm.checkout_info_page.verify_input_error_state()
         expect(pm.checkout_info_page.error_message).to_have_text("Error: Last Name is required")
     
     def test_first_name_postal_code_required(self, pm, checkout):
-        pm.checkout_info_page.input_last_name(fake.last_name())
+        pm.checkout_info_page.input_last_name(last_name := fake.last_name())
+        expect(pm.checkout_info_page.last_name_field).to_have_value(last_name)
         pm.checkout_info_page.continue_checkout()
         pm.checkout_info_page.verify_input_error_state()
         expect(pm.checkout_info_page.error_message).to_have_text("Error: First Name is required")
