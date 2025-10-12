@@ -19,6 +19,9 @@ class CheckoutInfoPage(BasePage):
         self.error_sign_first_name = page.locator("(//*[contains(@class, 'error_icon')])[1]")
         self.error_sign_last_name = page.locator("(//*[contains(@class, 'error_icon')])[2]")
         self.error_sign_postal_code = page.locator("(//*[contains(@class, 'error_icon')])[3]")
+        #self.error_sign_first_name = page.locator("(//input[@id='first-name']/parent::div//*[contains(@class, "error_icon")]")
+        #self.error_sign_last_name = page.locator("(//input[@id='last-name']/parent::div//*[contains(@class, "error_icon")]")
+        #self.error_sign_postal_code = page.locator("(//input[@id='postal-code']/parent::div//*[contains(@class, "error_icon")]")
 
     def verify_input_error_state(self):
         logger.info("Checking elements when input validation failed")
