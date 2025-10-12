@@ -11,8 +11,10 @@ class TestLogin:
 
     def test_invalid_credentials(self, pm):
         pm.login_page.open_login_page()
-        pm.login_page.input_username(fake.user_name())
-        pm.login_page.input_password(fake.password())
+        pm.login_page.input_username(user_name := fake.user_name())
+        expect(pm.login_page.username_field).to_have_value(user_name)
+        pm.login_page.input_password(password := fake.password())
+        expect(pm.login_page.password_field).to_have_value(password)
         pm.login_page.click_login()
         pm.login_page.verify_input_error_state()
         expect(pm.login_page.error_message).to_have_text(
@@ -20,22 +22,26 @@ class TestLogin:
 
     def test_password_required(self, pm):
         pm.login_page.open_login_page()
-        pm.login_page.input_username(fake.user_name())
+        pm.login_page.input_username(user_name := fake.user_name())
+        expect(pm.login_page.username_field).to_have_value(user_name)
         pm.login_page.click_login()
         pm.login_page.verify_input_error_state()
         expect(pm.login_page.error_message).to_have_text("Epic sadface: Password is required")
 
     def test_username_required(self, pm):
         pm.login_page.open_login_page()
-        pm.login_page.input_password(fake.password())
+        pm.login_page.input_password(password := fake.password())
+        expect(pm.login_page.password_field).to_have_value(password)
         pm.login_page.click_login()
         pm.login_page.verify_input_error_state()
         expect(pm.login_page.error_message).to_have_text("Epic sadface: Username is required")
 
     def test_invalid_password(self, pm):
         pm.login_page.open_login_page()
-        pm.login_page.input_username(Users.STANDARD_USER)
-        pm.login_page.input_password(fake.password())
+        pm.login_page.input_username(user_name := Users.STANDARD_USER)
+        expect(pm.login_page.username_field).to_have_value(user_name)
+        pm.login_page.input_password(password := fake.password())
+        expect(pm.login_page.password_field).to_have_value(password)
         pm.login_page.click_login()
         pm.login_page.verify_input_error_state()
         expect(pm.login_page.error_message).to_have_text(
@@ -43,8 +49,10 @@ class TestLogin:
 
     def test_invalid_username(self, pm):
         pm.login_page.open_login_page()
-        pm.login_page.input_username(fake.user_name())
-        pm.login_page.input_password(Users.PASSWORD)
+        pm.login_page.input_username(user_name := fake.user_name())
+        expect(pm.login_page.username_field).to_have_value(user_name)
+        pm.login_page.input_password(password := Users.PASSWORD)
+        expect(pm.login_page.password_field).to_have_value(password)
         pm.login_page.click_login()
         pm.login_page.verify_input_error_state()
         expect(pm.login_page.error_message).to_have_text(

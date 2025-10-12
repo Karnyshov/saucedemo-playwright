@@ -48,3 +48,13 @@ def open_empty_cart(page_manager):
     page_manager.login_page.login_standard_user()
     page_manager.products_page.open_cart_page()
     yield page_manager
+
+@pytest.fixture(scope = "function")
+def open_checkout_info_page(page_manager):
+    page_manager.login_page.open_login_page()
+    page_manager.login_page.login_standard_user()
+    item = page_manager.products_page.get_item(0)
+    item.add_to_cart()
+    page_manager.products_page.open_cart_page()
+    page_manager.cart_page.open_checkout_page()
+    yield item
