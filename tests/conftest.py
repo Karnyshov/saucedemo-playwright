@@ -1,6 +1,7 @@
 import pytest
 from playwright.sync_api import Page
 from src.client.sausedemo_ui import SauceDemoUI
+from utils.faker import fake
 
 @pytest.fixture
 def page_manager(page: Page):
@@ -58,3 +59,34 @@ def open_checkout_info_page(page_manager):
     page_manager.products_page.open_cart_page()
     page_manager.cart_page.open_checkout_page()
     yield item
+
+@pytest.fixture(scope = "function")
+def open_checkout_overview_page_with_item(page_manager):
+    page_manager.login_page.open_login_page()
+    page_manager.login_page.login_standard_user()
+    item = page_manager.products_page.get_item(0)
+    item.add_to_cart()
+    page_manager.products_page.open_cart_page()
+    page_manager.cart_page.open_checkout_page()
+    page_manager.checkout_info_page.input_first_name(fake.first_name())
+    page_manager.checkout_info_page.input_last_name(fake.last_name())
+    page_manager.checkout_info_page.input_postal_code(fake.postalcode())
+    page_manager.checkout_info_page.continue_checkout()
+    yield item
+
+@pytest.fixture(scope = "function")
+def open_checkout_overview_page_with_two_items(page_manager):
+    page_manager.login_page.open_login_page()
+    page_manager.login_page.login_standard_user()
+    item1 = page_manager.products_page.get_item(0)
+    item1.add_to_cart()
+    item2 = page_manager.products_page.get_item(1)
+    item2.add_to_cart()
+    items = [item1, item2]
+    page_manager.products_page.open_cart_page()
+    page_manager.cart_page.open_checkout_page()
+    page_manager.checkout_info_page.input_first_name(fake.first_name())
+    page_manager.checkout_info_page.input_last_name(fake.last_name())
+    page_manager.checkout_info_page.input_postal_code(fake.postalcode())
+    page_manager.checkout_info_page.continue_checkout()
+    yield items
