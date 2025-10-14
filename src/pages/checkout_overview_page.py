@@ -1,7 +1,10 @@
-from playwright.sync_api import Page, expect
+from playwright.sync_api import Page,expect,Locator
 from src.pages.base_page import BasePage
+from src.pages.checkout_item import CheckoutItem
 from utils.logger import logger
 from urllib.parse import urljoin
+from decimal import Decimal
+import re
 
 class CheckoutOverviewPage(BasePage):
     def __init__(self, page: Page) -> None:
@@ -31,6 +34,33 @@ class CheckoutOverviewPage(BasePage):
 
     def finish_checkout(self):
         pass
+
+    def get_all_items(self):
+        logger.info(f"Getting all Checkout Items on page")
+        items = []
+        for i in range(self.item_container.count()):
+            items.append(CheckoutItem(self.page, self.item_container.nth(i)))
+        return items
+
+    def get_item(self, position):
+        logger.info(f"Getting Checkout Item by given position")
+        items = self.get_all_items()
+        return items[position]
+
+    @staticmethod
+    def get_price_value(locator: Locator):
+        price_str = re.search(r"\d+\.\d+", locator.text_content()).group()
+        return Decimal(price_str)
+
+    def verify_prices(self, checkout_item: CheckoutItem):
+        item_price = self.get_price_value(self.price_item_total_value)
+        tax_price = self.get_price_value(self.price_tax_value)
+        total_price = self.get_price_value(self.price_total_value)
+        checkout_item_price = self.get_price_value(checkout_item.item_price)
+
+        assert item_price == checkout_item_price
+        assert total_price - item_price == tax_price
+        assert item_price + tax_price == total_price
     
     def verify_basic_state_single_item(self):
         expect(self.page_title).to_be_visible()

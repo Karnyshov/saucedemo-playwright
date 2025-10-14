@@ -49,6 +49,6 @@ class CartPage(BasePage):
         return items
 
     def get_item(self, position):
-        logger.info(f"Getting Product Item by given position")
+        logger.info(f"Getting Cart Item by given position")
         items = self.get_all_items()
         return items[position]

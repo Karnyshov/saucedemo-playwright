@@ -84,6 +84,16 @@ class TestCheckoutOverview:
         expect(pm.checkout_overview_page.shipping_info).to_have_text("Free Pony Express Delivery!")
 
     def test_price_info(self, pm, overview_item):
+        expect(pm.checkout_overview_page.price_total_label).to_have_text("Price Total")
+        expect(pm.checkout_overview_page.price_item_total_value).to_contain_text("Item total: $")
+        expect(pm.checkout_overview_page.price_tax_value).to_contain_text("Tax: $")
+        expect(pm.checkout_overview_page.price_total_value).to_contain_text("Total: $")
+
+    def test_price_values_one_item(self, pm, overview_item):
+        item = pm.checkout_overview_page.get_item(0)
+        pm.checkout_overview_page.verify_prices(item)
+
+    def test_price_values_two_items(self, pm, overview_items):
         pass
 
     def test_consistency(self, pm, overview_item):

@@ -23,7 +23,6 @@ class ProductItem(BasePage):
         self.description_text =  self.description.text_content()
         self.image_src = self.image.get_attribute("src")
 
-
     def verify_product_item(self) -> None:
         logger.info("Verifying given Product Item")
         expect(self.image).to_have_attribute("src", re.compile(r"^.+\.(jpg|jpeg)$"))
