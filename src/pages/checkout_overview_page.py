@@ -21,9 +21,9 @@ class CheckoutOverviewPage(BasePage):
         self.shipping_info_label = page.locator("//div[@data-test='shipping-info-label']")
         self.shipping_info = page.locator("//div[@data-test='shipping-info-value']")
         self.price_total_label = page.locator("//div[@data-test='total-info-label']")
-        self.price_item_total_value = page.locator("//div[@data-test='subtotal-label']")
-        self.price_tax_value = page.locator("//div[@data-test='tax-label']")
-        self.price_total_value = page.locator("//div[@data-test='total-label']")
+        self.price_item_total = page.locator("//div[@data-test='subtotal-label']")
+        self.price_tax = page.locator("//div[@data-test='tax-label']")
+        self.price_total = page.locator("//div[@data-test='total-label']")
 
         self.cancel_button = page.locator("//button[@id='cancel']")
         self.finish_button = page.locator("//button[@id='finish']")
@@ -33,7 +33,8 @@ class CheckoutOverviewPage(BasePage):
         self.cancel_button.click()
 
     def finish_checkout(self):
-        pass
+        logger.info("Finishing checkout, opening Checkout Complete page")
+        self.finish_button.click()
 
     def get_all_items(self):
         logger.info(f"Getting all Checkout Items on page")
@@ -48,19 +49,30 @@ class CheckoutOverviewPage(BasePage):
         return items[position]
 
     @staticmethod
-    def get_price_value(locator: Locator):
+    def get_price_value(locator: Locator) -> Decimal:
         price_str = re.search(r"\d+\.\d+", locator.text_content()).group()
         return Decimal(price_str)
 
-    def verify_prices(self, checkout_item: CheckoutItem):
-        item_price = self.get_price_value(self.price_item_total_value)
-        tax_price = self.get_price_value(self.price_tax_value)
-        total_price = self.get_price_value(self.price_total_value)
-        checkout_item_price = self.get_price_value(checkout_item.item_price)
+    #TODO: resolve attribute reference
+    def verify_prices(self, checkout_items: list[CheckoutItem]):
+        if not isinstance(checkout_items,list):
+            checkout_items = [checkout_items]
 
-        assert item_price == checkout_item_price
-        assert total_price - item_price == tax_price
-        assert item_price + tax_price == total_price
+        item_price_total = self.get_price_value(self.price_item_total)
+        tax_price = self.get_price_value(self.price_tax)
+        total_price = self.get_price_value(self.price_total)
+
+        sum_of_items = Decimal("0.00")
+        for item in checkout_items:
+            item_price = self.get_price_value(item.item_price)
+            sum_of_items += item_price
+
+        print(type(sum_of_items))
+        print(sum_of_items)
+        print(item_price_total)
+        assert item_price_total == sum_of_items
+        assert total_price - item_price_total == tax_price
+        assert item_price_total + tax_price == total_price
     
     def verify_basic_state_single_item(self):
         expect(self.page_title).to_be_visible()
@@ -74,9 +86,9 @@ class CheckoutOverviewPage(BasePage):
         expect(self.shipping_info_label).not_to_be_empty()
         expect(self.shipping_info).not_to_be_empty()
         expect(self.price_total_label).not_to_be_empty()
-        expect(self.price_item_total_value).not_to_be_empty()
-        expect(self.price_tax_value).not_to_be_empty()
-        expect(self.price_total_value).not_to_be_empty()
+        expect(self.price_item_total).not_to_be_empty()
+        expect(self.price_tax).not_to_be_empty()
+        expect(self.price_total).not_to_be_empty()
         expect(self.cancel_button).to_be_visible()
         expect(self.finish_button).to_be_visible()
         expect(self.shopping_cart_count).to_have_text("1")
@@ -92,9 +104,9 @@ class CheckoutOverviewPage(BasePage):
         expect(self.shipping_info_label).not_to_be_empty()
         expect(self.shipping_info).not_to_be_empty()
         expect(self.price_total_label).not_to_be_empty()
-        expect(self.price_item_total_value).not_to_be_empty()
-        expect(self.price_tax_value).not_to_be_empty()
-        expect(self.price_total_value).not_to_be_empty()
+        expect(self.price_item_total).not_to_be_empty()
+        expect(self.price_tax).not_to_be_empty()
+        expect(self.price_total).not_to_be_empty()
         expect(self.cancel_button).to_be_visible()
         expect(self.finish_button).to_be_visible()
         expect(self.shopping_cart_count).to_have_text("2")

@@ -11,6 +11,8 @@ class TestCheckoutOverview:
         pm.checkout_overview_page.verify_footer_facebook()
         pm.checkout_overview_page.verify_footer_linkedin()
         pm.checkout_overview_page.verify_basic_state_single_item()
+        item = pm.checkout_overview_page.get_item(0)
+        item.verify_checkout_item()
 
     def test_basic_state_two_items(self, pm, overview_items):
         pm.checkout_overview_page.verify_burger_menu_closed()
@@ -19,6 +21,10 @@ class TestCheckoutOverview:
         pm.checkout_overview_page.verify_footer_facebook()
         pm.checkout_overview_page.verify_footer_linkedin()
         pm.checkout_overview_page.verify_basic_state_two_items()
+        item1 = pm.checkout_overview_page.get_item(0)
+        item1.verify_checkout_item()
+        item2 = pm.checkout_overview_page.get_item(1)
+        item2.verify_checkout_item()
 
     def test_footer_twitter(self, pm, overview_item):
         pm.checkout_overview_page.verify_footer_twitter()
@@ -72,8 +78,11 @@ class TestCheckoutOverview:
 
     def test_finish_checkout(self, pm, overview_item):
         pm.checkout_overview_page.finish_checkout()
+        expect(pm.checkout_complete_page.page).to_have_url("https://www.saucedemo.com/checkout-complete.html")
 
-        pass
+    def test_open_cart_page(self, pm, overview_item):
+        pm.checkout_overview_page.open_cart_page()
+        expect(pm.cart_page.page).to_have_url("https://www.saucedemo.com/cart.html")
 
     def test_payment_info(self, pm, overview_item):
         expect(pm.checkout_overview_page.payment_info_label).to_have_text("Payment Information:")
@@ -94,10 +103,17 @@ class TestCheckoutOverview:
         pm.checkout_overview_page.verify_prices(item)
 
     def test_price_values_two_items(self, pm, overview_items):
-        pass
+        items = pm.checkout_overview_page.get_all_items()
+        pm.checkout_overview_page.verify_prices(items)
 
     def test_consistency(self, pm, overview_item):
-        pass
+        expect(pm.checkout_overview_page.shopping_cart_count).to_have_text("1")
+        item = pm.checkout_overview_page.get_item(0)
+        item.verify_content(overview_item)
 
     def test_consistency_two_items(self, pm, overview_items):
-        pass
+        expect(pm.checkout_overview_page.shopping_cart_count).to_have_text("2")
+        item1 = pm.checkout_overview_page.get_item(0)
+        item1.verify_content(overview_items[0])
+        item2 = pm.checkout_overview_page.get_item(1)
+        item2.verify_content(overview_items[1])
