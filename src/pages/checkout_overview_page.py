@@ -67,9 +67,6 @@ class CheckoutOverviewPage(BasePage):
             item_price = self.get_price_value(item.item_price)
             sum_of_items += item_price
 
-        print(type(sum_of_items))
-        print(sum_of_items)
-        print(item_price_total)
         assert item_price_total == sum_of_items
         assert total_price - item_price_total == tax_price
         assert item_price_total + tax_price == total_price
