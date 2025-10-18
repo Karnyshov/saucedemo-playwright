@@ -99,7 +99,7 @@ class TestCheckoutOverview:
         expect(pm.checkout_overview_page.price_total_value).to_contain_text("Total: $")
 
     def test_price_values_one_item(self, pm, overview_item):
-        item = pm.checkout_overview_page.get_item(0)
+        item = [pm.checkout_overview_page.get_item(0)]
         pm.checkout_overview_page.verify_prices(item)
 
     def test_price_values_two_items(self, pm, overview_items):

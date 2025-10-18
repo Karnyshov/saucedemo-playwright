@@ -50,14 +50,12 @@ class CheckoutOverviewPage(BasePage):
 
     @staticmethod
     def get_price_value(locator: Locator) -> Decimal:
+        logger.info(f"Getting price value in decimal")
         price_str = re.search(r"\d+\.\d+", locator.text_content()).group()
         return Decimal(price_str)
 
-    #TODO: resolve attribute reference
     def verify_prices(self, checkout_items: list[CheckoutItem]):
-        if not isinstance(checkout_items,list):
-            checkout_items = [checkout_items]
-
+        logger.info(f"Checking item prices, taxes, total value")
         item_price_total = self.get_price_value(self.price_item_total)
         tax_price = self.get_price_value(self.price_tax)
         total_price = self.get_price_value(self.price_total)
@@ -72,6 +70,7 @@ class CheckoutOverviewPage(BasePage):
         assert item_price_total + tax_price == total_price
     
     def verify_basic_state_single_item(self):
+        logger.info(f"Checking basic state of the page with single item in the cart")
         expect(self.page_title).to_be_visible()
         expect(self.page_title).to_have_text("Checkout: Overview")
         expect(self.item_container).to_be_visible()
@@ -91,6 +90,7 @@ class CheckoutOverviewPage(BasePage):
         expect(self.shopping_cart_count).to_have_text("1")
 
     def verify_basic_state_two_items(self):
+        logger.info(f"Checking basic state of the page with two item in the cart")
         expect(self.page_title).to_be_visible()
         expect(self.page_title).to_have_text("Checkout: Overview")
         expect(self.item_container).to_have_count(2)
