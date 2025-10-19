@@ -4,7 +4,14 @@ from tests.conftest import open_checkout_complete_page as checkout_complete
 
 class TestCheckoutComplete:
     def test_basic_state(self, pm, checkout_complete):
-        pass
+        expect(pm.checkout_complete_page.page_title).to_have_text("Checkout: Complete!")
+        pm.checkout_complete_page.verify_burger_menu_closed()
+        pm.checkout_complete_page.verify_copyright()
+        pm.checkout_complete_page.verify_footer_twitter()
+        pm.checkout_complete_page.verify_footer_facebook()
+        pm.checkout_complete_page.verify_footer_linkedin()
+        pm.checkout_complete_page.verify_empty_cart()
+        pm.checkout_complete_page.verify_basic_state()
 
     def test_footer_twitter(self, pm, checkout_complete):
         pm.checkout_complete_page.verify_footer_twitter()
@@ -52,13 +59,15 @@ class TestCheckoutComplete:
         expect(pm.login_page.page).to_have_title("Swag Labs")
 
     def test_back_to_home(self, pm, checkout_complete):
-        pass
+        pm.checkout_complete_page.open_products_page()
+        expect(pm.products_page.page).to_have_url("https://www.saucedemo.com/inventory.html")
 
     def test_open_cart_page(self, pm, checkout_complete):
-        pass
+        pm.checkout_complete_page.open_cart_page()
+        expect(pm.cart_page.page).to_have_url("https://www.saucedemo.com/cart.html")
 
-    def test_complete_header(self, pm, checkout_complete):
-        pass
-
-    def test_complete_text(self, pm, checkout_complete):
-        pass
+    def test_complete_content(self, pm, checkout_complete):
+        expect(pm.checkout_complete_page.complete_header).to_have_text("Thank you for your order!")
+        expect(pm.checkout_complete_page.complete_text).to_have_text(
+            "Your order has been dispatched, and will arrive just as fast as the pony can get there!")
+        pm.checkout_complete_page.verify_image()
