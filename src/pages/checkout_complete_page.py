@@ -1,7 +1,6 @@
 from playwright.sync_api import Page,expect
 from src.pages.base_page import BasePage
 from utils.logger import logger
-import re
 
 class CheckoutCompletePage(BasePage):
     def __init__(self, page: Page) -> None:
@@ -26,6 +25,6 @@ class CheckoutCompletePage(BasePage):
         expect(self.back_to_home_button).to_be_visible()
 
     def verify_image(self):
-        logger.info("Checking that image source is not empty and in png format")
-        expect(self.complete_image).to_have_attribute("src",re.compile(
-            r"^data:image/png;base64,[A-Za-z0-9+/=]+$"))
+        logger.info("Checking that image source is not empty and loaded")
+        expect(self.complete_image).to_be_visible()
+        assert self.complete_image.evaluate("(img) => img.complete && img.naturalWidth > 0 && img.naturalHeight > 0")
