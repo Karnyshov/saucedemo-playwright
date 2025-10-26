@@ -2,6 +2,7 @@ from playwright.sync_api import expect
 from tests.conftest import page_manager as pm
 from tests.conftest import open_checkout_overview_page_with_item as overview_item
 from tests.conftest import open_checkout_overview_page_with_two_items as overview_items
+from pytest_check import check
 
 class TestCheckoutOverview:
     def test_basic_state_single_item(self, pm, overview_item):
@@ -89,8 +90,10 @@ class TestCheckoutOverview:
         expect(pm.checkout_overview_page.payment_info).to_contain_text("SauceCard #")
 
     def test_shipping_info(self, pm, overview_item):
-        expect(pm.checkout_overview_page.shipping_info_label).to_have_text("Shipping Information:")
-        expect(pm.checkout_overview_page.shipping_info).to_have_text("Free Pony Express Delivery!")
+        with check:
+            expect(pm.checkout_overview_page.shipping_info_label).to_have_text("Shipping Information:1")
+        with check:
+            expect(pm.checkout_overview_page.shipping_info).to_have_text("Free Pony Express Delivery!1")
 
     def test_price_info(self, pm, overview_item):
         expect(pm.checkout_overview_page.price_total_label).to_have_text("Price Total")
