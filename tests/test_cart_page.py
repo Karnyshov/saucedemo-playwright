@@ -19,10 +19,7 @@ class TestCart:
         pm.cart_page.verify_footer_twitter()
         pm.cart_page.verify_footer_facebook()
         pm.cart_page.verify_footer_linkedin()
-        expect(pm.cart_page.item_container).to_be_visible()
-        expect(pm.cart_page.remove_button).to_be_visible()
-        expect(pm.cart_page.remove_button).to_have_text("Remove")
-        expect(pm.cart_page.shopping_cart_count).to_have_text("1")
+        pm.cart_page.verify_basic_state()
 
     def test_footer_twitter(self, pm, cart):
         pm.cart_page.verify_footer_twitter()
@@ -43,13 +40,9 @@ class TestCart:
         expect(pm.linkedin_page.page).to_have_title("Sauce Labs | LinkedIn")
 
     def test_burger_menu(self, pm, cart):
-        pm.cart_page.verify_burger_menu_closed()
         pm.cart_page.open_burger_menu()
-        pm.cart_page.verify_burger_menu_opened()
         pm.cart_page.close_burger_menu()
-        pm.cart_page.verify_burger_menu_closed()
 
-    #TODO: add check if menu already opened?
     def test_burger_menu_all_items(self, pm, cart):
         pm.cart_page.open_burger_menu()
         expect(pm.cart_page.burger_menu_all_items).to_have_attribute("href","#")

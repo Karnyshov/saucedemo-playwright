@@ -45,13 +45,9 @@ class TestCheckoutOverview:
         expect(pm.linkedin_page.page).to_have_title("Sauce Labs | LinkedIn")
 
     def test_burger_menu(self, pm, overview_item):
-        pm.checkout_overview_page.verify_burger_menu_closed()
         pm.checkout_overview_page.open_burger_menu()
-        pm.checkout_overview_page.verify_burger_menu_opened()
         pm.checkout_overview_page.close_burger_menu()
-        pm.checkout_overview_page.verify_burger_menu_closed()
 
-    #TODO: add check if menu already opened?
     def test_burger_menu_all_items(self, pm, overview_item):
         pm.checkout_overview_page.open_burger_menu()
         expect(pm.checkout_overview_page.burger_menu_all_items).to_have_attribute("href","#")

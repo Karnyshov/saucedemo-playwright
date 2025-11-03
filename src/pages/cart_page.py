@@ -52,3 +52,10 @@ class CartPage(BasePage):
         logger.info(f"Getting Cart Item by given position")
         items = self.get_all_items()
         return items[position]
+
+    def verify_basic_state(self):
+        logger.info("Checking basic state of the page with item")
+        expect(self.item_container).to_be_visible()
+        expect(self.remove_button).to_be_visible()
+        expect(self.remove_button).to_have_text("Remove")
+        expect(self.shopping_cart_count).to_have_text("1")

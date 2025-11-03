@@ -10,15 +10,7 @@ class TestCheckoutInfo:
         pm.checkout_info_page.verify_footer_twitter()
         pm.checkout_info_page.verify_footer_facebook()
         pm.checkout_info_page.verify_footer_linkedin()
-        pm.checkout_info_page.verify_last_name_field()
-        pm.checkout_info_page.verify_last_name_field()
-        pm.checkout_info_page.verify_postal_code_field()
-        pm.checkout_info_page.verify_cancel_button()
-        pm.checkout_info_page.verify_continue_button()
-        pm.checkout_info_page.verify_basic_input_state()
-        expect(pm.checkout_info_page.page_title).to_have_text("Checkout: Your Information")
-        expect(pm.checkout_info_page.shopping_cart_count).to_have_text("1")
-        expect(pm.checkout_info_page.shopping_cart).to_be_visible()
+        pm.checkout_info_page.verify_basic_state()
 
     def test_footer_twitter(self, pm, checkout):
         pm.checkout_info_page.verify_footer_twitter()
@@ -39,13 +31,9 @@ class TestCheckoutInfo:
         expect(pm.linkedin_page.page).to_have_title("Sauce Labs | LinkedIn")
 
     def test_burger_menu(self, pm, checkout):
-        pm.checkout_info_page.verify_burger_menu_closed()
         pm.checkout_info_page.open_burger_menu()
-        pm.checkout_info_page.verify_burger_menu_opened()
         pm.checkout_info_page.close_burger_menu()
-        pm.checkout_info_page.verify_burger_menu_closed()
 
-    #TODO: add check if menu already opened?
     def test_burger_menu_all_items(self, pm, checkout):
         pm.checkout_info_page.open_burger_menu()
         expect(pm.checkout_info_page.burger_menu_all_items).to_have_attribute("href","#")

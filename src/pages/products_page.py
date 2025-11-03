@@ -1,5 +1,5 @@
 import random
-from playwright.sync_api import Page
+from playwright.sync_api import Page, expect
 from src.pages.base_page import BasePage
 from src.pages.product_item import ProductItem
 from utils.logger import logger
@@ -86,3 +86,9 @@ class ProductsPage(BasePage):
     def open_cart_page(self) -> None:
         logger.info(f"Opening Cart page")
         self.shopping_cart.click()
+
+    def verify_basic_state(self):
+        logger.info("Checking basic state of the page")
+        expect(self.active_sorting).to_have_text("Name (A to Z)")
+        expect(self.products_page_title).to_have_text("Products")
+        expect(self.product_item_element).not_to_have_count(0)

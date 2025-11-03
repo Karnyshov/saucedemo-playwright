@@ -26,14 +26,20 @@ class LoginPage(BasePage):
         logger.info(f"Opening page")
         self.page.goto(self.base_url)
 
-    # TODO: add check and additional CLEAR action
     def input_username(self, text) -> None:
-        logger.info(f"Typing an username: {text}")
+        logger.info(f"Checking if input already has value and filling in provided username: {text}")
+        value = self.username_field.input_value()
+        if value != text:
+            logger.warning(f"Input is already present: {value} \n Clearing input to fill in provided data")
+            self.username_field.clear()
         self.username_field.fill(text)
 
-    #TODO: add check and additional CLEAR action
     def input_password(self, text) -> None:
-        logger.info(f"Typing a password")
+        logger.info(f"Checking if input already has value and filling in provided password")
+        value = self.password_field.input_value()
+        if value != text:
+            logger.warning(f"Input is already present: {value} \n Clearing input to fill in provided data")
+            self.password_field.clear()
         self.password_field.fill(text)
 
     def click_login(self) -> None:
@@ -92,6 +98,7 @@ class LoginPage(BasePage):
         expect(self.username_field).to_have_css("border-bottom-color","rgb(226, 35, 26)")
         expect(self.password_field).to_have_css("border-bottom-color","rgb(226, 35, 26)")
 
+    #TODO: make similar to checkout_info_page
     def verify_basic_state(self) -> None:
         #Checks for input fields and login button omitted since they're already implemented: https://playwright.dev/python/docs/actionability
         logger.info(f"Checking basic state: input empty, no visible error elements")

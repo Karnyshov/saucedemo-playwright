@@ -48,6 +48,7 @@ class ItemPage(BasePage):
         expect(self.price).not_to_be_empty()
         expect(self.price).to_have_text(re.compile(r"^\$(\d{1,3}([ ,.]?\d{3})*|\d+)([.,]\d{1,2})?$"))
         expect(self.add_button).to_be_visible()
+        expect(self.back_to_products_button).to_be_visible()
 
     def verify_url(self, item_id):
         logger.info(f"Checking page URL has is valid and has id from given attribute: {item_id} and URI: {self.page.url}")

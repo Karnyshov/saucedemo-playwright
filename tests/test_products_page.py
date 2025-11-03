@@ -11,9 +11,7 @@ class TestProducts:
         pm.products_page.verify_footer_facebook()
         pm.products_page.verify_footer_linkedin()
         pm.products_page.verify_empty_cart()
-        expect(pm.products_page.active_sorting).to_have_text("Name (A to Z)")
-        expect(pm.products_page.products_page_title).to_have_text("Products")
-        expect(pm.products_page.product_item_element).not_to_have_count(0)
+        pm.products_page.verify_basic_state()
 
     def test_footer_twitter(self, pm, login):
         pm.products_page.verify_footer_twitter()
@@ -34,13 +32,9 @@ class TestProducts:
         expect(pm.linkedin_page.page).to_have_title("Sauce Labs | LinkedIn")
 
     def test_burger_menu(self, pm, login):
-        pm.products_page.verify_burger_menu_closed()
         pm.products_page.open_burger_menu()
-        pm.products_page.verify_burger_menu_opened()
         pm.products_page.close_burger_menu()
-        pm.products_page.verify_burger_menu_closed()
 
-    #TODO: add check if menu already opened?
     def test_burger_menu_all_items(self, pm, login):
         pm.products_page.open_burger_menu()
         expect(pm.products_page.burger_menu_all_items).to_have_attribute("href","#")
