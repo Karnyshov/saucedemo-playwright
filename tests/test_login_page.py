@@ -58,7 +58,6 @@ class TestLogin:
         expect(pm.login_page.error_message).to_have_text(
             "Epic sadface: Username and password do not match any user in this service")
 
-#TODO: need to refine approach?
     def test_standard_user(self, pm):
         pm.login_page.open_login_page()
         pm.login_page.login_standard_user()

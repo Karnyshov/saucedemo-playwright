@@ -95,7 +95,7 @@ class CheckoutInfoPage(BasePage):
 
     def verify_basic_state(self):
         logger.info("Checking basic state of the page")
-        self.verify_last_name_field()
+        self.verify_first_name_field()
         self.verify_last_name_field()
         self.verify_postal_code_field()
         self.verify_cancel_button()
