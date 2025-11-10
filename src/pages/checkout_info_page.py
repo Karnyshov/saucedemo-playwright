@@ -92,3 +92,15 @@ class CheckoutInfoPage(BasePage):
     def input_postal_code(self, text):
         logger.info(f"Typing a Postal Code: {text}")
         self.postal_code_field.fill(text)
+
+    def verify_basic_state(self):
+        logger.info("Checking basic state of the page")
+        self.verify_first_name_field()
+        self.verify_last_name_field()
+        self.verify_postal_code_field()
+        self.verify_cancel_button()
+        self.verify_continue_button()
+        self.verify_basic_input_state()
+        expect(self.page_title).to_have_text("Checkout: Your Information")
+        expect(self.shopping_cart_count).to_have_text("1")
+        expect(self.shopping_cart).to_be_visible()

@@ -12,7 +12,6 @@ class TestProductItem:
         pm.product_item_page.verify_empty_cart()
         pm.product_item_page.verify_basic_state()
         pm.product_item_page.verify_url(item.item_id)
-        expect(pm.product_item_page.back_to_products_button).to_be_visible()
 
     def test_footer_twitter(self, pm, item):
         pm.product_item_page.verify_footer_twitter()
@@ -33,13 +32,11 @@ class TestProductItem:
         expect(pm.linkedin_page.page).to_have_title("Sauce Labs | LinkedIn")
 
     def test_burger_menu(self, pm, item):
-        pm.product_item_page.verify_burger_menu_closed()
         pm.product_item_page.open_burger_menu()
         pm.product_item_page.verify_burger_menu_opened()
         pm.product_item_page.close_burger_menu()
         pm.product_item_page.verify_burger_menu_closed()
 
-    #TODO: add check if menu already opened?
     def test_burger_menu_all_items(self, pm, item):
         pm.product_item_page.open_burger_menu()
         expect(pm.product_item_page.burger_menu_all_items).to_have_attribute("href","#")

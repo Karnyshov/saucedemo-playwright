@@ -26,14 +26,20 @@ class LoginPage(BasePage):
         logger.info(f"Opening page")
         self.page.goto(self.base_url)
 
-    # TODO: add check and additional CLEAR action
     def input_username(self, text) -> None:
-        logger.info(f"Typing an username: {text}")
+        logger.info(f"Checking if input already has value and filling in provided username: {text}")
+        value = self.username_field.input_value()
+        if value != text:
+            logger.warning(f"Input is already present: {value} \n Clearing input to fill in provided data")
+            self.username_field.clear()
         self.username_field.fill(text)
 
-    #TODO: add check and additional CLEAR action
     def input_password(self, text) -> None:
-        logger.info(f"Typing a password")
+        logger.info(f"Checking if input already has value and filling in provided password")
+        value = self.password_field.input_value()
+        if value != text:
+            logger.warning(f"Input is already present: {value} \n Clearing input to fill in provided data")
+            self.password_field.clear()
         self.password_field.fill(text)
 
     def click_login(self) -> None:
@@ -92,16 +98,31 @@ class LoginPage(BasePage):
         expect(self.username_field).to_have_css("border-bottom-color","rgb(226, 35, 26)")
         expect(self.password_field).to_have_css("border-bottom-color","rgb(226, 35, 26)")
 
+    def verify_username_field(self):
+        expect(self.username_field).to_be_visible()
+        expect(self.username_field).to_be_editable()
+        expect(self.username_field).to_be_empty()
+        expect(self.username_field).to_have_attribute("placeholder", "Username")
+
+    def verify_password_field(self):
+        expect(self.password_field).to_be_visible()
+        expect(self.password_field).to_be_editable()
+        expect(self.password_field).to_be_empty()
+        expect(self.password_field).to_have_attribute("placeholder","Password")
+
+    def verify_input_basic_state(self):
+        logger.info("Checking elements of form without input")
+        expect(self.error_sign_username).not_to_be_visible()
+        expect(self.error_sign_password).not_to_be_visible()
+        expect(self.error_message_container).not_to_be_visible()
+        expect(self.error_message_close_button).not_to_be_visible()
+        expect(self.username_field).not_to_have_css("border-bottom-color","rgb(226, 35, 26)")
+        expect(self.password_field).not_to_have_css("border-bottom-color","rgb(226, 35, 26)")
+
     def verify_basic_state(self) -> None:
-        #Checks for input fields and login button omitted since they're already implemented: https://playwright.dev/python/docs/actionability
         logger.info(f"Checking basic state: input empty, no visible error elements")
         expect(self.page).to_have_url("https://www.saucedemo.com/")
         expect(self.page).to_have_title("Swag Labs")
-        expect(self.error_message_container).to_be_empty()
-        expect(self.error_message_close_button).to_be_hidden()
-        expect(self.error_sign_username).to_be_hidden()
-        expect(self.error_sign_password).to_be_hidden()
-        expect(self.username_field).to_be_empty()
-        expect(self.password_field).to_be_empty()
-        expect(self.username_field).not_to_have_css("border-bottom-color","rgb(226, 35, 26)")
-        expect(self.password_field).not_to_have_css("border-bottom-color","rgb(226, 35, 26)")
+        self.verify_username_field()
+        self.verify_password_field()
+        self.verify_input_basic_state()

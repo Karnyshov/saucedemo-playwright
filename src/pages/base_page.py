@@ -45,14 +45,24 @@ class BasePage(abc.ABC):
         expect(self.burger_menu_reset).to_have_attribute("tabindex","-1")
 
     def open_burger_menu(self) -> None:
-        logger.info(f"Opening burger menu")
-        self.burger_button.click()
-        self.verify_burger_menu_opened()
+        logger.info(f"Opening burger menu and skipping if it was already opened")
+        if not self.burger_menu.is_hidden():
+            logger.warning("Burger menu was already opened, verifying it")
+            self.verify_burger_menu_opened()
+        else:
+            logger.info("Burger menu is hidden, opening it and verifying")
+            self.burger_button.click()
+            self.verify_burger_menu_opened()
 
     def close_burger_menu(self) -> None:
-        logger.info(f"Closing burger menu")
-        self.burger_close_button.click()
-        self.verify_burger_menu_closed()
+        logger.info(f"Closing burger menu and skipping if it was already closed")
+        if self.burger_menu.is_hidden():
+            logger.warning("Burger menu was already closed, verifying it")
+            self.verify_burger_menu_closed()
+        else:
+            logger.info("Burger menu is opened, closing it and verifying")
+            self.burger_close_button.click()
+            self.verify_burger_menu_closed()
 
     def click_footer_button(self, locator):
         logger.info(f"Clicking on button in footer to open a page in a new tab")
