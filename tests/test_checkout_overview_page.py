@@ -46,7 +46,9 @@ class TestCheckoutOverview:
 
     def test_burger_menu(self, pm, overview_item):
         pm.checkout_overview_page.open_burger_menu()
+        pm.checkout_overview_page.verify_burger_menu_opened()
         pm.checkout_overview_page.close_burger_menu()
+        pm.checkout_overview_page.verify_burger_menu_closed()
 
     def test_burger_menu_all_items(self, pm, overview_item):
         pm.checkout_overview_page.open_burger_menu()

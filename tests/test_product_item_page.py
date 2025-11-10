@@ -33,7 +33,9 @@ class TestProductItem:
 
     def test_burger_menu(self, pm, item):
         pm.product_item_page.open_burger_menu()
+        pm.product_item_page.verify_burger_menu_opened()
         pm.product_item_page.close_burger_menu()
+        pm.product_item_page.verify_burger_menu_closed()
 
     def test_burger_menu_all_items(self, pm, item):
         pm.product_item_page.open_burger_menu()

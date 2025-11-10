@@ -41,7 +41,9 @@ class TestCart:
 
     def test_burger_menu(self, pm, cart):
         pm.cart_page.open_burger_menu()
+        pm.cart_page.verify_burger_menu_opened()
         pm.cart_page.close_burger_menu()
+        pm.cart_page.verify_burger_menu_closed()
 
     def test_burger_menu_all_items(self, pm, cart):
         pm.cart_page.open_burger_menu()
